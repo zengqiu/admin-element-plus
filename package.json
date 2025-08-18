@@ -4,14 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --open",
-    "build": "vue-tsc --noEmit && vite build",
-    "serve": "vite preview",
-    "clean:dev": "tsx scripts/clean-dev.ts"
-  },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-git"
-    }
+    "build": "vue-tsc --noEmit && vite build"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
