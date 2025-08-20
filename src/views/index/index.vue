@@ -16,7 +16,7 @@
     <!-- 聊天窗口 -->
     <ArtChatWindow />
     <!-- 水印效果 -->
-    <ArtWatermark />
+    <Watermark />
   </ArtLayouts>
 </template>
 

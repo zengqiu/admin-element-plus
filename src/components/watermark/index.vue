@@ -17,7 +17,7 @@
   import AppConfig from '@/config'
   import { useSettingStore } from '@/store/modules/setting'
 
-  defineOptions({ name: 'ArtWatermark' })
+  defineOptions({ name: 'Watermark' })
 
   const settingStore = useSettingStore()
   const { watermarkVisible } = storeToRefs(settingStore)
