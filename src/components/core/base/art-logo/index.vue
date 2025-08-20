@@ -5,16 +5,15 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   defineOptions({ name: 'ArtLogo' })
 
-  interface Props {
+  const props = defineProps({
     /** logo 大小 */
-    size?: number | string
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    size: 36
+    size: {
+      type: [Number, String],
+      default: 36
+    }
   })
 
   const logoStyle = computed(() => ({ width: `${props.size}px` }))

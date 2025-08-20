@@ -47,15 +47,14 @@
   </ElMenuItem>
 </template>
 
-<script lang="ts" setup>
-  import { computed, type PropType } from 'vue'
-  import { AppRouteRecord } from '@/types/router'
+<script setup>
+  import { computed } from 'vue'
   import { handleMenuJump } from '@/utils/navigation'
   import { formatMenuTitle } from '@/router/utils/utils'
 
   const props = defineProps({
     item: {
-      type: Object as PropType<AppRouteRecord>,
+      type: Object,
       required: true
     },
     theme: {
@@ -81,7 +80,7 @@
     return filteredChildren.value.length > 0
   })
 
-  const goPage = (item: AppRouteRecord) => {
+  const goPage = (item) => {
     closeMenu()
     handleMenuJump(item)
   }

@@ -12,28 +12,26 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { useCommon } from '@/composables/useCommon'
 
   const router = useRouter()
 
-  interface ExceptionData {
-    /** 标题 */
-    title: string
-    /** 描述 */
-    desc: string
-    /** 按钮文本 */
-    btnText: string
-    /** 图片地址 */
-    imgUrl: string
-  }
-
-  withDefaults(
-    defineProps<{
-      data: ExceptionData
-    }>(),
-    {}
-  )
+  defineProps({
+    data: {
+      type: Object,
+      // default: () => ({
+      //   /** 标题 */
+      //   title: undefined,
+      //   /** 描述 */
+      //   desc: undefined,
+      //   /** 按钮文本 */
+      //   btnText: undefined,
+      //   /** 图片地址 */
+      //   imgUrl: undefined
+      // })
+    }
+  })
 
   const backHome = () => {
     router.push(useCommon().homePath.value)

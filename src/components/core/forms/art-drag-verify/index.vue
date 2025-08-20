@@ -40,74 +40,92 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   defineOptions({ name: 'ArtDragVerify' })
 
   // 事件定义
   const emit = defineEmits(['handlerMove', 'update:value', 'passCallback'])
 
-  // 组件属性接口定义
-  interface PropsType {
+  const props = defineProps({
     /** 是否通过验证 */
-    value: boolean
+    value: {
+      type: Boolean,
+      default: false
+    },
     /** 组件宽度 */
-    width?: number | string
+    width: {
+      type: [Number, String],
+      default: '100%'
+    },
     /** 组件高度 */
-    height?: number
+    height: {
+      type: Number,
+      default: 40
+    },
     /** 默认提示文本 */
-    text?: string
+    text: {
+      type: String,
+      default: '按住滑块拖动'
+    },
     /** 成功提示文本 */
-    successText?: string
+    successText: {
+      type: String,
+      default: 'success'
+    },
     /** 背景色 */
-    background?: string
+    background: {
+      type: String,
+      default: '#eee'
+    },
     /** 进度条背景色 */
-    progressBarBg?: string
+    progressBarBg: {
+      type: String,
+      default: '#1385FF'
+    },
     /** 完成状态背景色 */
-    completedBg?: string
+    completedBg: {
+      type: String,
+      default: '#57D187'
+    },
     /** 是否圆角 */
-    circle?: boolean
+    circle: {
+      type: Boolean,
+      default: false
+    },
     /** 圆角大小 */
-    radius?: string
+    radius: {
+      type: String,
+      default: 'calc(var(--custom-radius) / 3 + 2px)'
+    },
     /** 滑块图标 */
-    handlerIcon?: string
+    handlerIcon: {
+      type: String,
+      default: '&#xea50;'
+    },
     /** 成功图标 */
-    successIcon?: string
+    successIcon: {
+      type: String,
+      default: '&#xe621;'
+    },
     /** 滑块背景色 */
-    handlerBg?: string
+    handlerBg: {
+      type: String,
+      default: '#fff'
+    },
     /** 文本大小 */
-    textSize?: string
+    textSize: {
+      type: String,
+      default: '13px'
+    },
     /** 文本颜色 */
-    textColor?: string
-  }
-
-  // 属性默认值设置
-  const props = withDefaults(defineProps<PropsType>(), {
-    value: false,
-    width: '100%',
-    height: 40,
-    text: '按住滑块拖动',
-    successText: 'success',
-    background: '#eee',
-    progressBarBg: '#1385FF',
-    completedBg: '#57D187',
-    circle: false,
-    radius: 'calc(var(--custom-radius) / 3 + 2px)',
-    handlerIcon: '&#xea50;',
-    successIcon: '&#xe621;',
-    handlerBg: '#fff',
-    textSize: '13px',
-    textColor: '#333'
+    textColor: {
+      type: String,
+      default: '#333'
+    }
   })
 
-  // 组件状态接口定义
-  interface StateType {
-    isMoving: boolean // 是否正在拖拽
-    x: number // 拖拽起始位置
-    isOk: boolean // 是否验证成功
-  }
-
   // 响应式状态定义
-  const state = reactive(<StateType>{
+  const state = reactive({
     isMoving: false,
     x: 0,
     isOk: false
@@ -123,13 +141,13 @@
   const progressBar = ref()
 
   // 触摸事件变量 - 用于禁止页面滑动
-  let startX: number, startY: number, moveX: number, moveY: number
+  let startX, startY, moveX, moveY
 
   /**
    * 触摸开始事件处理
    * @param e 触摸事件对象
    */
-  const onTouchStart = (e: any) => {
+  const onTouchStart = (e) => {
     startX = e.targetTouches[0].pageX
     startY = e.targetTouches[0].pageY
   }
@@ -138,7 +156,7 @@
    * 触摸移动事件处理 - 判断是否为横向滑动，如果是则阻止默认行为
    * @param e 触摸事件对象
    */
-  const onTouchMove = (e: any) => {
+  const onTouchMove = (e) => {
     moveX = e.targetTouches[0].pageX
     moveY = e.targetTouches[0].pageY
 
@@ -153,7 +171,7 @@
   document.addEventListener('touchmove', onTouchMove, { passive: false })
 
   // 获取数值形式的宽度
-  const getNumericWidth = (): number => {
+  const getNumericWidth = () => {
     if (typeof props.width === 'string') {
       // 如果是字符串，尝试从DOM元素获取实际宽度
       return dragVerify.value?.offsetWidth || 260
@@ -162,7 +180,7 @@
   }
 
   // 获取样式字符串形式的宽度
-  const getStyleWidth = (): string => {
+  const getStyleWidth = () => {
     if (typeof props.width === 'string') {
       return props.width
     }
@@ -232,7 +250,7 @@
    * 拖拽开始处理函数
    * @param e 鼠标或触摸事件对象
    */
-  const dragStart = (e: any) => {
+  const dragStart = (e) => {
     if (!props.value) {
       state.isMoving = true
       handler.value.style.transition = 'none'
@@ -247,7 +265,7 @@
    * 拖拽移动处理函数
    * @param e 鼠标或触摸事件对象
    */
-  const dragMoving = (e: any) => {
+  const dragMoving = (e) => {
     if (state.isMoving && !props.value) {
       const numericWidth = getNumericWidth()
       // 计算当前位置
@@ -270,7 +288,7 @@
    * 拖拽结束处理函数
    * @param e 鼠标或触摸事件对象
    */
-  const dragFinish = (e: any) => {
+  const dragFinish = (e) => {
     if (state.isMoving && !props.value) {
       const numericWidth = getNumericWidth()
       // 计算最终位置

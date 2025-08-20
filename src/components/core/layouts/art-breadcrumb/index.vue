@@ -7,7 +7,7 @@
           :class="{ clickable: isClickable(item, index) }"
           @click="handleBreadcrumbClick(item, index)"
         >
-          <span>{{ formatMenuTitle(item.meta?.title as string) }}</span>
+          <span>{{ formatMenuTitle(item.meta?.title) }}</span>
         </div>
         <div
           v-if="!isLastItem(index) && item.meta?.title"
@@ -21,24 +21,18 @@
   </nav>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { computed } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
-  import type { RouteLocationMatched, RouteRecordRaw } from 'vue-router'
   import { formatMenuTitle } from '@/router/utils/utils'
 
   defineOptions({ name: 'ArtBreadcrumb' })
-
-  export interface BreadcrumbItem {
-    path: string
-    meta: RouteRecordRaw['meta']
-  }
 
   const route = useRoute()
   const router = useRouter()
 
   // 使用computed替代watch，提高性能
-  const breadcrumbItems = computed<BreadcrumbItem[]>(() => {
+  const breadcrumbItems = computed(() => {
     const { matched } = route
 
     // 处理首页情况
@@ -54,7 +48,7 @@
   })
 
   // 辅助函数：创建面包屑项目
-  function createBreadcrumbItem(route: RouteLocationMatched): BreadcrumbItem {
+  function createBreadcrumbItem(route) {
     return {
       path: route.path,
       meta: route.meta
@@ -62,32 +56,32 @@
   }
 
   // 辅助函数：判断是否为首页
-  function isHomeRoute(route: RouteLocationMatched): boolean {
+  function isHomeRoute(route) {
     return route.name === '/'
   }
 
   // 辅助函数：判断是否为最后一项
-  function isLastItem(index: number): boolean {
+  function isLastItem(index) {
     return index === breadcrumbItems.value.length - 1
   }
 
   // 辅助函数：判断是否可点击
-  function isClickable(item: BreadcrumbItem, index: number): boolean {
+  function isClickable(item, index) {
     return item.path !== '/outside' && !isLastItem(index)
   }
 
   // 辅助函数：查找路由的第一个有效子路由
-  function findFirstValidChild(route: RouteRecordRaw) {
+  function findFirstValidChild(route) {
     return route.children?.find((child) => !child.redirect && !child.meta?.isHide)
   }
 
   // 辅助函数：构建完整路径
-  function buildFullPath(childPath: string): string {
+  function buildFullPath(childPath) {
     return `/${childPath}`.replace('//', '/')
   }
 
   // 处理面包屑点击事件
-  async function handleBreadcrumbClick(item: BreadcrumbItem, index: number): Promise<void> {
+  async function handleBreadcrumbClick(item, index) {
     // 如果是最后一项或外部链接，不处理
     if (isLastItem(index) || item.path === '/outside') {
       return

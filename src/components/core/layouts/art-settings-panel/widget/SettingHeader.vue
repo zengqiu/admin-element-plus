@@ -6,10 +6,8 @@
   </div>
 </template>
 
-<script setup lang="ts">
-  defineEmits<{
-    close: []
-  }>()
+<script setup>
+  defineEmits(['close'])
 </script>
 
 <style lang="scss" scoped>

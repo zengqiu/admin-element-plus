@@ -20,35 +20,28 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { useAuth } from '@/composables/useAuth'
 
   defineOptions({ name: 'ArtButtonMore' })
 
   const { hasAuth } = useAuth()
 
-  export interface ButtonMoreItem {
-    /** 按钮标识，可用于点击事件 */
-    key: string | number
-    /** 按钮文本 */
-    label: string
-    /** 是否禁用 */
-    disabled?: boolean
-    /** 权限标识 */
-    auth?: string
-  }
-
-  interface Props {
+  const props = defineProps({
     /** 下拉项列表 */
-    list: ButtonMoreItem[]
+    list: {
+      type: Array,  // [{key: string | number, label: string, disabled?: boolean, auth?: string}]
+      required: true
+    },
     /** 整体权限控制 */
-    auth?: string
+    auth: {
+      type: String
+    },
     /** 是否显示背景 */
-    hasBackground?: boolean
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    hasBackground: true
+    hasBackground: {
+      type: Boolean,
+      default: true
+    }
   })
 
   // 检查是否有任何有权限的 item
@@ -56,11 +49,9 @@
     return props.list.some((item) => !item.auth || hasAuth(item.auth))
   })
 
-  const emit = defineEmits<{
-    (e: 'click', item: ButtonMoreItem): void
-  }>()
+  const emit = defineEmits(['click'])
 
-  const handleClick = (item: ButtonMoreItem) => {
+  const handleClick = (item) => {
     emit('click', item)
   }
 </script>

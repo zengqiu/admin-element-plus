@@ -20,10 +20,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import AppConfig from '@/config'
   import SectionTitle from './SectionTitle.vue'
-  import { MenuTypeEnum, type MenuThemeEnum } from '@/enums/appEnum'
+  import { MenuTypeEnum } from '@/enums/appEnum'
   import { useSettingStore } from '@/store/modules/setting'
 
   const menuThemeList = AppConfig.themeList
@@ -35,7 +35,7 @@
   const disabled = computed(() => isTopMenu.value || isDualMenu.value || isDark.value)
 
   // 菜单样式切换
-  const switchMenuStyles = (theme: MenuThemeEnum) => {
+  const switchMenuStyles = (theme) => {
     if (isDualMenu.value || isTopMenu.value || isDark.value) {
       return
     }

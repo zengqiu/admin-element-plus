@@ -38,7 +38,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import AppConfig from '@/config'
   import { RoutesAlias } from '@/router/routesAlias'
 

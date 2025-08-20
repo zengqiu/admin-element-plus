@@ -18,110 +18,125 @@
   </ElButton>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import * as XLSX from 'xlsx'
   import FileSaver from 'file-saver'
   import { ref, computed, nextTick } from 'vue'
   import { ElMessage } from 'element-plus'
   import { Loading } from '@element-plus/icons-vue'
-  import type { ButtonType } from 'element-plus'
   import { useThrottleFn } from '@vueuse/core'
 
   defineOptions({ name: 'ArtExcelExport' })
 
-  /** 导出数据类型 */
-  type ExportValue = string | number | boolean | null | undefined | Date
-
-  interface ExportData {
-    [key: string]: ExportValue
-  }
-
-  /** 列配置 */
-  interface ColumnConfig {
-    /** 列标题 */
-    title: string
-    /** 列宽度 */
-    width?: number
-    /** 数据格式化函数 */
-    formatter?: (value: ExportValue, row: ExportData, index: number) => string
-  }
-
-  /** 导出配置选项 */
-  interface ExportOptions {
+  const props = defineProps({
     /** 数据源 */
-    data: ExportData[]
+    data: {
+      type: Array,  // [{string: string | number | boolean | null | undefined | Date}]
+      required: true
+    },
     /** 文件名（不含扩展名） */
-    filename?: string
+    filename: {
+      type: String,
+      default: () => `export_${new Date().toISOString().slice(0, 10)}`
+    },
     /** 工作表名称 */
-    sheetName?: string
+    sheetName: {
+      type: String,
+      default: 'Sheet1'
+    },
     /** 按钮类型 */
-    type?: ButtonType
+    type: {
+      type: String, // 假设 ButtonType 是字符串类型
+      default: 'primary',
+      validator: (value) => {
+        const validTypes = [
+          'primary',
+          'success',
+          'warning',
+          'danger',
+          'info',
+          'text',
+          '' // 空字符串代表默认按钮
+        ]
+        return validTypes.includes(value)
+      }
+    },
     /** 按钮尺寸 */
-    size?: 'large' | 'default' | 'small'
+    size: {
+      type: String,
+      default: 'default',
+      validator: (value) => ['large', 'default', 'small'].includes(value)
+    },
     /** 是否禁用 */
-    disabled?: boolean
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     /** 按钮文本 */
-    buttonText?: string
+    buttonText: {
+      type: String,
+      default: '导出 Excel'
+    },
     /** 加载中文本 */
-    loadingText?: string
+    loadingText: {
+      type: String,
+      default: '导出中...'
+    },
     /** 是否自动添加序号列 */
-    autoIndex?: boolean
+    autoIndex: {
+      type: Boolean,
+      default: false
+    },
     /** 序号列标题 */
-    indexColumnTitle?: string
+    indexColumnTitle: {
+      type: String,
+      default: '序号'
+    },
     /** 列配置映射 */
-    columns?: Record<string, ColumnConfig>
+    columns: {
+      type: Object,  // {string: {title列标题: string, width列宽度?: number, formatter数据格式化函数?: (value: ExportValue, row: ExportData, index: number) => string}}
+      default: () => ({})
+    },
     /** 表头映射（简化版本，向后兼容） */
-    headers?: Record<string, string>
+    headers: {
+      type: Object,  // {string: string}
+      default: () => ({})
+    },
     /** 最大导出行数 */
-    maxRows?: number
+    maxRows: {
+      type: Number,
+      default: 100000
+    },
     /** 是否显示成功消息 */
-    showSuccessMessage?: boolean
+    showSuccessMessage: {
+      type: Boolean,
+      default: true
+    },
     /** 是否显示错误消息 */
-    showErrorMessage?: boolean
+    showErrorMessage: {
+      type: Boolean,
+      default: true
+    },
     /** 工作簿配置 */
-    workbookOptions?: {
-      /** 创建者 */
-      creator?: string
-      /** 最后修改者 */
-      lastModifiedBy?: string
-      /** 创建时间 */
-      created?: Date
-      /** 修改时间 */
-      modified?: Date
+    workbookOptions: {
+      type: Object,  // {creator创建者?: string, lastModifiedBy最后修改者?: string, created创建时间?: Date, modified修改时间?: Date}
+      default: () => ({})
     }
-  }
-
-  const props = withDefaults(defineProps<ExportOptions>(), {
-    filename: () => `export_${new Date().toISOString().slice(0, 10)}`,
-    sheetName: 'Sheet1',
-    type: 'primary',
-    size: 'default',
-    disabled: false,
-    buttonText: '导出 Excel',
-    loadingText: '导出中...',
-    autoIndex: false,
-    indexColumnTitle: '序号',
-    columns: () => ({}),
-    headers: () => ({}),
-    maxRows: 100000,
-    showSuccessMessage: true,
-    showErrorMessage: true,
-    workbookOptions: () => ({})
   })
 
-  const emit = defineEmits<{
-    'before-export': [data: ExportData[]]
-    'export-success': [filename: string, rowCount: number]
-    'export-error': [error: ExportError]
-    'export-progress': [progress: number]
-  }>()
+  const emit = defineEmits([
+    'before-export',
+    'export-success',
+    'export-error',
+    'export-progress'
+  ])
 
   /** 导出错误类型 */
   class ExportError extends Error {
     constructor(
-      message: string,
-      public code: string,
-      public details?: any
+      message,
+      code,
+      details
     ) {
       super(message)
       this.name = 'ExportError'
@@ -134,7 +149,7 @@
   const hasData = computed(() => Array.isArray(props.data) && props.data.length > 0)
 
   /** 验证导出数据 */
-  const validateData = (data: ExportData[]): void => {
+  const validateData = (data) => {
     if (!Array.isArray(data)) {
       throw new ExportError('数据必须是数组格式', 'INVALID_DATA_TYPE')
     }
@@ -153,11 +168,11 @@
 
   /** 格式化单元格值 */
   const formatCellValue = (
-    value: ExportValue,
-    key: string,
-    row: ExportData,
-    index: number
-  ): string => {
+    value,
+    key,
+    row,
+    index
+  ) => {
     // 使用列配置的格式化函数
     const column = props.columns[key]
     if (column?.formatter) {
@@ -181,9 +196,9 @@
   }
 
   /** 处理数据 */
-  const processData = (data: ExportData[]): Record<string, string>[] => {
+  const processData = (data) => {
     const processedData = data.map((item, index) => {
-      const processedItem: Record<string, string> = {}
+      const processedItem = {}
 
       // 添加序号列
       if (props.autoIndex) {
@@ -211,7 +226,7 @@
   }
 
   /** 计算列宽度 */
-  const calculateColumnWidths = (data: Record<string, string>[]): XLSX.ColInfo[] => {
+  const calculateColumnWidths = (data) => {
     if (data.length === 0) return []
 
     const sampleSize = Math.min(data.length, 100) // 只取前100行计算列宽
@@ -239,10 +254,10 @@
 
   /** 导出到 Excel */
   const exportToExcel = async (
-    data: ExportData[],
-    filename: string,
-    sheetName: string
-  ): Promise<void> => {
+    data,
+    filename,
+    sheetName
+  ) => {
     try {
       emit('export-progress', 10)
 
@@ -311,7 +326,7 @@
 
       return Promise.resolve()
     } catch (error) {
-      throw new ExportError(`Excel 导出失败: ${(error as Error).message}`, 'EXPORT_FAILED', error)
+      throw new ExportError(`Excel 导出失败: ${(error).message}`, 'EXPORT_FAILED', error)
     }
   }
 
@@ -345,7 +360,7 @@
       const exportError =
         error instanceof ExportError
           ? error
-          : new ExportError(`导出失败: ${(error as Error).message}`, 'UNKNOWN_ERROR', error)
+          : new ExportError(`导出失败: ${(error).message}`, 'UNKNOWN_ERROR', error)
 
       // 触发错误事件
       emit('export-error', exportError)

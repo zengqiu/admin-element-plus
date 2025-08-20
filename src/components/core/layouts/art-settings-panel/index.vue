@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { useSettingsPanel } from './composables/useSettingsPanel'
 
   import SettingDrawer from './widget/SettingDrawer.vue'
@@ -37,12 +37,12 @@
 
   defineOptions({ name: 'ArtSettingsPanel' })
 
-  interface Props {
+  const props = defineProps({
     /** 是否打开 */
-    open?: boolean
-  }
-
-  const props = defineProps<Props>()
+    open: {
+      type: Boolean
+    }
+  })
 
   // 使用设置面板逻辑
   const settingsPanel = useSettingsPanel()

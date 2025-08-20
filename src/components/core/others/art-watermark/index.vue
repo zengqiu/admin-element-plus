@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import AppConfig from '@/config'
   import { useSettingStore } from '@/store/modules/setting'
 
@@ -22,40 +22,57 @@
   const settingStore = useSettingStore()
   const { watermarkVisible } = storeToRefs(settingStore)
 
-  interface WatermarkProps {
+  const props = defineProps({
     /** 水印内容 */
-    content?: string
+    content: {
+      type: String,
+      default: AppConfig.systemInfo.name
+    },
     /** 水印是否可见 */
-    visible?: boolean
+    visible: {
+      type: Boolean,
+      default: false
+    },
     /** 水印字体大小 */
-    fontSize?: number
+    fontSize: {
+      type: Number,
+      default: 16
+    },
     /** 水印字体颜色 */
-    fontColor?: string
+    fontColor: {
+      type: String,
+      default: 'rgba(128, 128, 128, 0.2)'
+    },
     /** 水印旋转角度 */
-    rotate?: number
+    rotate: {
+      type: Number,
+      default: -22
+    },
     /** 水印间距X */
-    gapX?: number
+    gapX: {
+      type: Number,
+      default: 100
+    },
     /** 水印间距Y */
-    gapY?: number
+    gapY: {
+      type: Number,
+      default: 100
+    },
     /** 水印偏移X */
-    offsetX?: number
+    offsetX: {
+      type: Number,
+      default: 50
+    },
     /** 水印偏移Y */
-    offsetY?: number
+    offsetY: {
+      type: Number,
+      default: 50
+    },
     /** 水印层级 */
-    zIndex?: number
-  }
-
-  withDefaults(defineProps<WatermarkProps>(), {
-    content: AppConfig.systemInfo.name,
-    visible: false,
-    fontSize: 16,
-    fontColor: 'rgba(128, 128, 128, 0.2)',
-    rotate: -22,
-    gapX: 100,
-    gapY: 100,
-    offsetX: 50,
-    offsetY: 50,
-    zIndex: 3100
+    zIndex: {
+      type: Number,
+      default: 3100
+    }
   })
 </script>
 

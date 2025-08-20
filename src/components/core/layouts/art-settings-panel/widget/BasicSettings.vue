@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import SectionTitle from './SectionTitle.vue'
   import SettingItem from './SettingItem.vue'
   import { useSettingStore } from '@/store/modules/setting'
@@ -62,14 +62,14 @@
   }
 
   // 获取设置值的方法
-  const getSettingValue = (key: string) => {
-    const settingRef = settingValueMap[key as keyof typeof settingValueMap]
+  const getSettingValue = (key) => {
+    const settingRef = settingValueMap[key]
     return settingRef?.value ?? null
   }
 
   // 统一的设置变更处理
-  const handleSettingChange = (handlerName: string, value: any) => {
-    const handler = (basicHandlers as any)[handlerName]
+  const handleSettingChange = (handlerName, value) => {
+    const handler = (basicHandlers)[handlerName]
     if (typeof handler === 'function') {
       handler(value)
     } else {

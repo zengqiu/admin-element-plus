@@ -13,21 +13,19 @@
   </ArtSearchBar>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { ref, computed, onMounted, h } from 'vue'
   import ArtIconSelector from '@/components/core/base/art-icon-selector/index.vue'
   import { IconTypeEnum } from '@/enums/appEnum'
 
-  interface Props {
-    modelValue: Record<string, any>
-  }
-  interface Emits {
-    (e: 'update:modelValue', value: Record<string, any>): void
-    (e: 'search', params: Record<string, any>): void
-    (e: 'reset'): void
-  }
-  const props = defineProps<Props>()
-  const emit = defineEmits<Emits>()
+  const props = defineProps({
+    modelValue: {
+      type: Object,
+      required: true
+    }
+  })
+
+  const emit = defineEmits(['update:modelValue', 'search', 'reset'])
 
   // 表单数据双向绑定
   const searchBarRef = ref()
@@ -42,10 +40,10 @@
   }
 
   // 动态 options
-  const levelOptions = ref<{ label: string; value: string; disabled?: boolean }[]>([])
+  const levelOptions = ref([])
 
   // 模拟接口返回用户等级
-  function fetchLevelOptions(): Promise<typeof levelOptions.value> {
+  function fetchLevelOptions() {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([

@@ -23,21 +23,19 @@
   </div>
 </template>
 
-<script setup lang="ts">
-  import type { AppRouteRecord } from '@/types/router'
+<script setup>
   import HorizontalSubmenu from './widget/HorizontalSubmenu.vue'
 
   defineOptions({ name: 'ArtHorizontalMenu' })
 
-  interface Props {
-    /** 菜单列表数据 */
-    list: AppRouteRecord[]
-  }
-
   const route = useRoute()
 
-  const props = withDefaults(defineProps<Props>(), {
-    list: () => []
+  const props = defineProps({
+    /** 菜单列表数据 */
+    list: {
+      type: Array,
+      default: () => []
+    }
   })
 
   /**
@@ -60,7 +58,7 @@
    * @param items 菜单项数组
    * @returns 过滤后的菜单项数组
    */
-  const filterMenuItems = (items: AppRouteRecord[]): AppRouteRecord[] => {
+  const filterMenuItems = (items) => {
     return items
       .filter((item) => {
         // 如果当前项被隐藏，直接过滤掉

@@ -115,7 +115,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import AppConfig from '@/config'
   import { useSettingStore } from '@/store/modules/setting'
   import { MenuTypeEnum, MenuWidth } from '@/enums/appEnum'
@@ -139,7 +139,7 @@
     storeToRefs(settingStore)
 
   // 组件内部状态
-  const defaultOpenedMenus = ref<string[]>([])
+  const defaultOpenedMenus = ref([])
   const isMobileMode = ref(false)
   const showMobileModal = ref(false)
   const currentScreenWidth = ref(0)
@@ -192,14 +192,14 @@
   /**
    * 检查是否为移动端屏幕
    */
-  const isMobileScreen = (): boolean => {
+  const isMobileScreen = () => {
     return document.body.clientWidth < MOBILE_BREAKPOINT
   }
 
   /**
    * 延迟隐藏移动端模态框
    */
-  const delayHideMobileModal = (): void => {
+  const delayHideMobileModal = () => {
     setTimeout(() => {
       showMobileModal.value = false
     }, ANIMATION_DELAY)
@@ -208,9 +208,9 @@
   /**
    * 查找 iframe 对应的二级菜单列表
    */
-  const findIframeMenuList = (currentPath: string, menuList: any[]) => {
+  const findIframeMenuList = (currentPath, menuList) => {
     // 递归查找包含当前路径的菜单项
-    const hasPath = (items: any[]): boolean => {
+    const hasPath = (items) => {
       for (const item of items) {
         if (item.path === currentPath) {
           return true
@@ -234,14 +234,14 @@
   /**
    * 导航到首页
    */
-  const navigateToHome = (): void => {
+  const navigateToHome = () => {
     router.push(useCommon().homePath.value)
   }
 
   /**
    * 切换菜单显示/隐藏
    */
-  const toggleMenuVisibility = (): void => {
+  const toggleMenuVisibility = () => {
     settingStore.setMenuOpen(!menuOpen.value)
 
     // 移动端模态框控制逻辑
@@ -259,7 +259,7 @@
   /**
    * 处理菜单关闭（来自子组件）
    */
-  const handleMenuClose = (): void => {
+  const handleMenuClose = () => {
     if (isMobileScreen()) {
       settingStore.setMenuOpen(false)
       delayHideMobileModal()
@@ -269,14 +269,14 @@
   /**
    * 切换双列菜单模式
    */
-  const toggleDualMenuMode = (): void => {
+  const toggleDualMenuMode = () => {
     settingStore.setDualMenuShowText(!dualMenuShowText.value)
   }
 
   /**
    * 处理屏幕尺寸变化
    */
-  const handleScreenResize = (): void => {
+  const handleScreenResize = () => {
     // 小屏幕自动折叠菜单
     if (currentScreenWidth.value < MOBILE_BREAKPOINT) {
       settingStore.setMenuOpen(false)
@@ -293,7 +293,7 @@
   /**
    * 设置窗口大小监听器
    */
-  const setupWindowResizeListener = (): void => {
+  const setupWindowResizeListener = () => {
     currentScreenWidth.value = document.body.clientWidth
     handleScreenResize()
 
@@ -308,7 +308,7 @@
    */
   watch(
     () => menuOpen.value,
-    (isMenuOpen: boolean) => {
+    (isMenuOpen) => {
       if (!isMobileScreen()) {
         // 大屏幕设备上，模态框始终隐藏
         showMobileModal.value = false

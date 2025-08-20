@@ -6,18 +6,21 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { ref, computed, watchEffect } from 'vue'
 
-  interface Props {
-    size?: string | number
-    themeColor?: string
-    src?: string
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    size: 500,
-    themeColor: 'var(--el-color-primary)'
+  const props = defineProps({
+    size: {
+      type: [String, Number],
+      default: 500
+    },
+    themeColor: {
+      type: String,
+      default: 'var(--el-color-primary)'
+    },
+    src: {
+      type: String
+    }
   })
 
   const svgContent = ref('')
@@ -40,10 +43,10 @@
     '#fff': 'var(--art-main-bg-color)',
     '#ffffff': 'var(--art-main-bg-color)',
     '#DEEBFC': 'var(--el-color-primary-light-7)'
-  } as const
+  }
 
   // 将主题色应用到 SVG 内容
-  const applyThemeToSvg = (content: string): string => {
+  const applyThemeToSvg = (content) => {
     return Object.entries(COLOR_MAPPINGS).reduce(
       (processedContent, [originalColor, themeColor]) => {
         const fillRegex = new RegExp(`fill="${originalColor}"`, 'gi')

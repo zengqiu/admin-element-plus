@@ -70,15 +70,18 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import AppConfig from '@/config'
   import loginIcon from '@imgs/svg/login_icon.svg'
   import { themeAnimation } from '@/utils/theme/animation'
 
   // 定义 props
-  defineProps<{
-    hideContent?: boolean // 是否隐藏内容，只显示 logo
-  }>()
+  defineProps({
+    /** 是否隐藏内容，只显示 logo */
+    hideContent: {
+      type: Boolean
+    }
+  })
 </script>
 
 <style lang="scss" scoped>

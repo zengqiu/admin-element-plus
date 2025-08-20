@@ -147,9 +147,9 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { useUserStore } from '@/store/modules/user'
-  import { ElForm, FormInstance, FormRules } from 'element-plus'
+  import { ElForm } from 'element-plus'
 
   defineOptions({ name: 'UserCenter' })
 
@@ -175,9 +175,9 @@
     confirmPassword: '123456'
   })
 
-  const ruleFormRef = ref<FormInstance>()
+  const ruleFormRef = ref()
 
-  const rules = reactive<FormRules>({
+  const rules = reactive({
     realName: [
       { required: true, message: '请输入昵称', trigger: 'blur' },
       { min: 2, max: 50, message: '长度在 2 到 30 个字符', trigger: 'blur' }
@@ -203,7 +203,7 @@
     }
   ]
 
-  const lableList: Array<string> = ['专注设计', '很有想法', '辣~', '大长腿', '川妹子', '海纳百川']
+  const lableList = ['专注设计', '很有想法', '辣~', '大长腿', '川妹子', '海纳百川']
 
   onMounted(() => {
     getDate()

@@ -84,10 +84,9 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { Lock, Unlock } from '@element-plus/icons-vue'
   import { ElMessage } from 'element-plus'
-  import type { FormInstance, FormRules } from 'element-plus'
   import { useI18n } from 'vue-i18n'
   import CryptoJS from 'crypto-js'
   import { useUserStore } from '@/store/modules/user'
@@ -104,14 +103,14 @@
   const { info: userInfo, lockPassword, isLock } = storeToRefs(userStore)
 
   // 响应式数据
-  const visible = ref<boolean>(false)
-  const lockInputRef = ref<any>(null)
-  const unlockInputRef = ref<any>(null)
-  const showDevToolsWarning = ref<boolean>(false)
+  const visible = ref(false)
+  const lockInputRef = ref(null)
+  const unlockInputRef = ref(null)
+  const showDevToolsWarning = ref(false)
 
   // 表单相关
-  const formRef = ref<FormInstance>()
-  const unlockFormRef = ref<FormInstance>()
+  const formRef = ref()
+  const unlockFormRef = ref()
 
   const formData = reactive({
     password: ''
@@ -122,7 +121,7 @@
   })
 
   // 表单验证规则
-  const rules = computed<FormRules>(() => ({
+  const rules = computed(() => ({
     password: [
       {
         required: true,
@@ -142,7 +141,7 @@
   // 添加禁用控制台的函数
   const disableDevTools = () => {
     // 禁用右键菜单
-    const handleContextMenu = (e: Event) => {
+    const handleContextMenu = (e) => {
       if (isLock.value) {
         e.preventDefault()
         e.stopPropagation()
@@ -152,7 +151,7 @@
     document.addEventListener('contextmenu', handleContextMenu, true)
 
     // 禁用开发者工具相关快捷键
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handleKeyDown = (e) => {
       if (!isLock.value) return
 
       // 禁用 F12
@@ -245,7 +244,7 @@
     document.addEventListener('keydown', handleKeyDown, true)
 
     // 禁用选择文本
-    const handleSelectStart = (e: Event) => {
+    const handleSelectStart = (e) => {
       if (isLock.value) {
         e.preventDefault()
         return false
@@ -254,7 +253,7 @@
     document.addEventListener('selectstart', handleSelectStart, true)
 
     // 禁用拖拽
-    const handleDragStart = (e: Event) => {
+    const handleDragStart = (e) => {
       if (isLock.value) {
         e.preventDefault()
         return false
@@ -265,7 +264,7 @@
     // 监听开发者工具打开状态（仅在桌面端启用）
     let devtools = { open: false }
     const threshold = 160
-    let devToolsInterval: ReturnType<typeof setInterval> | null = null
+    let devToolsInterval = null
 
     const checkDevTools = () => {
       if (!isLock.value || isMobile()) return
@@ -301,7 +300,7 @@
   }
 
   // 工具函数
-  const verifyPassword = (inputPassword: string, storedPassword: string): boolean => {
+  const verifyPassword = (inputPassword, storedPassword) => {
     try {
       const decryptedPassword = CryptoJS.AES.decrypt(storedPassword, ENCRYPT_KEY).toString(
         CryptoJS.enc.Utf8
@@ -314,7 +313,7 @@
   }
 
   // 事件处理函数
-  const handleKeydown = (event: KeyboardEvent) => {
+  const handleKeydown = (event) => {
     if (event.altKey && event.key.toLowerCase() === '¬') {
       event.preventDefault()
       visible.value = true
@@ -391,7 +390,7 @@
   })
 
   // 存储清理函数
-  let cleanupDevTools: (() => void) | null = null
+  let cleanupDevTools = null
 
   // 生命周期钩子
   onMounted(() => {

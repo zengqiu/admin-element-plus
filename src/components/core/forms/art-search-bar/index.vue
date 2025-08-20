@@ -98,7 +98,7 @@
   </section>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { ArrowUpBold, ArrowDownBold } from '@element-plus/icons-vue'
   import { useWindowSize } from '@vueuse/core'
   import { useI18n } from 'vue-i18n'
@@ -116,7 +116,6 @@
     ElRadioGroup,
     ElButton,
     ElIcon,
-    FormInstance,
     ElRate,
     ElSlider,
     ElRow,
@@ -153,84 +152,98 @@
   const { t } = useI18n()
   const isMobile = computed(() => width.value < 500)
 
-  const formInstance = useTemplateRef<FormInstance>('formRef')
+  const formInstance = useTemplateRef('formRef')
 
-  // 表单项配置
-  export interface SearchFormItem {
-    /** 表单项的唯一标识 */
-    key: string
-    /** 表单项的标签文本 */
-    label: string
-    /** 表单项标签的宽度，会覆盖 Form 的 labelWidth */
-    labelWidth?: string | number
-    /** 表单项类型，可以是预定义的字符串类型或自定义组件 */
-    type: keyof typeof componentMap | string | (() => VNode)
-    /** 是否隐藏该表单项 */
-    hidden?: boolean
-    /** 表单项占据的列宽，基于24格栅格系统 */
-    span?: number
-    /** 选项数据，用于 select、checkbox-group、radio-group 等 */
-    options?: Record<string, any>
-    /** 传递给表单项组件的属性 */
-    props?: Record<string, any>
-    /** 表单项的插槽配置 */
-    slots?: Record<string, (() => any) | undefined>
-    /** 表单项的占位符文本 */
-    placeholder?: string
-    /** 更多属性配置请参考 ElementPlus 官方文档 */
-  }
-
-  // 表单配置
-  interface SearchBarProps {
+  const props = defineProps({
     /** 表单数据 */
-    items: SearchFormItem[]
+    items: {
+      // [{
+      /** 表单项的唯一标识 */
+  //     key: string
+  //     /** 表单项的标签文本 */
+  //     label: string
+  //     /** 表单项标签的宽度，会覆盖 Form 的 labelWidth */
+  //     labelWidth?: string | number
+  //     /** 表单项类型，可以是预定义的字符串类型或自定义组件 */
+  //     type: keyof typeof componentMap | string | (() => VNode)
+  //     /** 是否隐藏该表单项 */
+  //     hidden?: boolean
+  //     /** 表单项占据的列宽，基于24格栅格系统 */
+  //     span?: number
+  //     /** 选项数据，用于 select、checkbox-group、radio-group 等 */
+  //     options?: Record<string, any>
+  //   /** 传递给表单项组件的属性 */
+  //   props?: Record<string, any>
+  // /** 表单项的插槽配置 */
+  // slots?: Record<string, (() => any) | undefined>
+  // /** 表单项的占位符文本 */
+  // placeholder?: string
+  // /** 更多属性配置请参考 ElementPlus 官方文档 */
+  // }]
+      type: Array,
+      default: () => []
+    },
     /** 每列的宽度（基于 24 格布局） */
-    span?: number
+    span: {
+      type: Number,
+      default: 6
+    },
     /** 表单控件间隙 */
-    gutter?: number
+    gutter: {
+      type: Number,
+      default: 12
+    },
     /** 展开/收起 */
-    isExpand?: boolean
+    isExpand: {
+      type: Boolean,
+      default: false
+    },
     /** 默认是否展开（仅在 showExpand 为 true 且 isExpand 为 false 时生效） */
-    defaultExpanded?: boolean
+    defaultExpanded: {
+      type: Boolean,
+      default: false
+    },
     /** 表单域标签的位置 */
-    labelPosition?: 'left' | 'right' | 'top'
+    labelPosition: {
+      type: String,
+      default: 'right',
+      validator: (value) => ['left', 'right', 'top'].includes(value)
+    },
     /** 文字宽度 */
-    labelWidth?: string | number
+    labelWidth: {
+      type: [String, Number],
+      default: '70px'
+    },
     /** 是否需要展示，收起 */
-    showExpand?: boolean
+    showExpand: {
+      type: Boolean,
+      default: true
+    },
     /** 按钮靠左对齐限制（表单项小于等于该值时） */
-    buttonLeftLimit?: number
+    buttonLeftLimit: {
+      type: Number,
+      default: 2
+    },
     /** 是否显示重置按钮 */
-    showReset?: boolean
+    showReset: {
+      type: Boolean,
+      default: true
+    },
     /** 是否显示搜索按钮 */
-    showSearch?: boolean
+    showSearch: {
+      type: Boolean,
+      default: true
+    },
     /** 是否禁用搜索按钮 */
-    disabledSearch?: boolean
-  }
-
-  const props = withDefaults(defineProps<SearchBarProps>(), {
-    items: () => [],
-    span: 6,
-    gutter: 12,
-    isExpand: false,
-    labelPosition: 'right',
-    labelWidth: '70px',
-    showExpand: true,
-    defaultExpanded: false,
-    buttonLeftLimit: 2,
-    showReset: true,
-    showSearch: true,
-    disabledSearch: false
+    disabledSearch: {
+      type: Boolean,
+      default: false
+    }
   })
 
-  interface SearchBarEmits {
-    reset: []
-    search: []
-  }
+  const emit = defineEmits(['reset', 'search'])
 
-  const emit = defineEmits<SearchBarEmits>()
-
-  const modelValue = defineModel<Record<string, any>>({ default: {} })
+  const modelValue = defineModel({ default: {} })
 
   /**
    * 是否展开状态
@@ -239,17 +252,17 @@
 
   const rootProps = ['label', 'labelWidth', 'key', 'type', 'hidden', 'span', 'slots']
 
-  const getProps = (item: SearchFormItem) => {
+  const getProps = (item) => {
     if (item.props) return item.props
     const props = { ...item }
-    rootProps.forEach((key) => delete (props as Record<string, any>)[key])
+    rootProps.forEach((key) => delete props[key])
     return props
   }
 
   // 获取插槽
-  const getSlots = (item: SearchFormItem) => {
+  const getSlots = (item) => {
     if (!item.slots) return {}
-    const validSlots: Record<string, () => any> = {}
+    const validSlots = {}
     Object.entries(item.slots).forEach(([key, slotFn]) => {
       if (slotFn) {
         validSlots[key] = slotFn
@@ -259,11 +272,11 @@
   }
 
   // 组件
-  const getComponent = (item: SearchFormItem) => {
+  const getComponent = (item) => {
     const { type } = item
     if (type && typeof item.type !== 'string') return type
     // type不传递、默认使用 input
-    return componentMap[type as keyof typeof componentMap] || componentMap['input']
+    return componentMap[type] || componentMap['input']
   }
 
   /**
@@ -340,7 +353,7 @@
 
   defineExpose({
     ref: formInstance,
-    validate: (...args: any[]) => formInstance.value?.validate(...args),
+    validate: (...args) => formInstance.value?.validate(...args),
     reset: handleReset
   })
 

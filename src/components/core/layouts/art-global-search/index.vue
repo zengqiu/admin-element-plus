@@ -79,14 +79,12 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
   import { useUserStore } from '@/store/modules/user'
-  import { AppRouteRecord } from '@/types/router'
   import { Search } from '@element-plus/icons-vue'
   import { mittBus } from '@/utils/sys'
   import { useMenuStore } from '@/store/modules/menu'
   import { formatMenuTitle } from '@/router/utils/utils'
-  import { type ScrollbarInstance } from 'element-plus'
 
   defineOptions({ name: 'ArtGlobalSearch' })
 
@@ -96,15 +94,15 @@
 
   const showSearchDialog = ref(false)
   const searchVal = ref('')
-  const searchResult = ref<AppRouteRecord[]>([])
+  const searchResult = ref([])
   const historyMaxLength = 10
 
   const { searchHistory: historyResult } = storeToRefs(userStore)
 
-  const searchInput = ref<HTMLInputElement | null>(null)
+  const searchInput = ref(null)
   const highlightedIndex = ref(0)
   const historyHIndex = ref(0)
-  const searchResultScrollbar = ref<ScrollbarInstance>()
+  const searchResultScrollbar = ref()
   const isKeyboardNavigating = ref(false) // 新增状态：是否正在使用键盘导航
 
   // 生命周期钩子
@@ -118,7 +116,7 @@
   })
 
   // 键盘快捷键处理
-  const handleKeydown = (event: KeyboardEvent) => {
+  const handleKeydown = (event) => {
     const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
     const isCommandKey = isMac ? event.metaKey : event.ctrlKey
 
@@ -153,7 +151,7 @@
   }
 
   // 搜索逻辑
-  const search = (val: string) => {
+  const search = (val) => {
     if (val) {
       searchResult.value = flattenAndFilterMenuItems(menuList.value, val)
     } else {
@@ -161,11 +159,11 @@
     }
   }
 
-  const flattenAndFilterMenuItems = (items: AppRouteRecord[], val: string): AppRouteRecord[] => {
+  const flattenAndFilterMenuItems = (items, val) => {
     const lowerVal = val.toLowerCase()
-    const result: AppRouteRecord[] = []
+    const result = []
 
-    const flattenAndMatch = (item: AppRouteRecord) => {
+    const flattenAndMatch = (item) => {
       if (item.meta?.isHide) return
 
       const lowerItemTitle = formatMenuTitle(item.meta.title).toLowerCase()
@@ -226,7 +224,7 @@
       const highlightedElements = scrollWrapper.querySelectorAll('.result .box')
       if (!highlightedElements[highlightedIndex.value]) return
 
-      const highlightedElement = highlightedElements[highlightedIndex.value] as HTMLElement
+      const highlightedElement = highlightedElements[highlightedIndex.value]
       const itemHeight = highlightedElement.offsetHeight
       const scrollTop = scrollWrapper.scrollTop
       const containerHeight = scrollWrapper.clientHeight
@@ -251,7 +249,7 @@
       const historyItems = scrollWrapper.querySelectorAll('.history-result .box')
       if (!historyItems[historyHIndex.value]) return
 
-      const highlightedElement = historyItems[historyHIndex.value] as HTMLElement
+      const highlightedElement = historyItems[historyHIndex.value]
       const itemHeight = highlightedElement.offsetHeight
       const scrollTop = scrollWrapper.scrollTop
       const containerHeight = scrollWrapper.clientHeight
@@ -274,7 +272,7 @@
     }
   }
 
-  const isHighlighted = (index: number) => {
+  const isHighlighted = (index) => {
     return highlightedIndex.value === index
   }
 
@@ -282,7 +280,7 @@
     highlightedIndex.value = 0
   }
 
-  const searchGoPage = (item: AppRouteRecord) => {
+  const searchGoPage = (item) => {
     showSearchDialog.value = false
     addHistory(item)
     router.push(item.path)
@@ -297,9 +295,9 @@
     }
   }
 
-  const addHistory = (item: AppRouteRecord) => {
+  const addHistory = (item) => {
     const hasItemIndex = historyResult.value.findIndex(
-      (historyItem: AppRouteRecord) => historyItem.path === item.path
+      (historyItem) => historyItem.path === item.path
     )
 
     if (hasItemIndex !== -1) {
@@ -315,7 +313,7 @@
     updateHistory()
   }
 
-  const deleteHistory = (index: number) => {
+  const deleteHistory = (index) => {
     historyResult.value.splice(index, 1)
     updateHistory()
   }
@@ -334,13 +332,13 @@
   }
 
   // 修改 hover 高亮逻辑，只有在非键盘导航时才生效
-  const highlightOnHover = (index: number) => {
+  const highlightOnHover = (index) => {
     if (!isKeyboardNavigating.value && searchVal.value) {
       highlightedIndex.value = index
     }
   }
 
-  const highlightOnHoverHistory = (index: number) => {
+  const highlightOnHoverHistory = (index) => {
     if (!isKeyboardNavigating.value && !searchVal.value) {
       historyHIndex.value = index
     }

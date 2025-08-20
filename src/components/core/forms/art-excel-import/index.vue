@@ -14,14 +14,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import * as XLSX from 'xlsx'
-  import type { UploadFile } from 'element-plus'
 
   defineOptions({ name: 'ArtExcelImport' })
 
   // Excel 导入工具函数
-  async function importExcel(file: File): Promise<any[]> {
+  async function importExcel(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader()
 
@@ -44,19 +43,16 @@
   }
 
   // 定义 emits
-  const emit = defineEmits<{
-    'import-success': [data: any[]]
-    'import-error': [error: Error]
-  }>()
+  const emit = defineEmits(['import-success', 'import-error'])
 
   // 处理文件导入
-  const handleFileChange = async (uploadFile: UploadFile) => {
+  const handleFileChange = async (uploadFile) => {
     try {
       if (!uploadFile.raw) return
       const results = await importExcel(uploadFile.raw)
       emit('import-success', results)
     } catch (error) {
-      emit('import-error', error as Error)
+      emit('import-error', error)
     }
   }
 </script>

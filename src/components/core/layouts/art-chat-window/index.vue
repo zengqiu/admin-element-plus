@@ -63,23 +63,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { Picture, Paperclip } from '@element-plus/icons-vue'
   import { mittBus } from '@/utils/sys'
   import meAvatar from '@/assets/img/avatar/avatar5.webp'
   import aiAvatar from '@/assets/img/avatar/avatar10.webp'
 
   defineOptions({ name: 'ArtChatWindow' })
-
-  // 类型定义
-  interface ChatMessage {
-    id: number
-    sender: string
-    content: string
-    time: string
-    isMe: boolean
-    avatar: string
-  }
 
   // 常量定义
   const MOBILE_BREAKPOINT = 500
@@ -98,10 +88,10 @@
   // 消息相关状态
   const messageText = ref('')
   const messageId = ref(10)
-  const messageContainer = ref<HTMLElement | null>(null)
+  const messageContainer = ref(null)
 
   // 初始化聊天消息数据
-  const initializeMessages = (): ChatMessage[] => [
+  const initializeMessages = () => [
     {
       id: 1,
       sender: BOT_NAME,
@@ -176,17 +166,17 @@
     }
   ]
 
-  const messages = ref<ChatMessage[]>(initializeMessages())
+  const messages = ref(initializeMessages())
 
   // 工具函数
-  const formatCurrentTime = (): string => {
+  const formatCurrentTime = () => {
     return new Date().toLocaleTimeString([], {
       hour: '2-digit',
       minute: '2-digit'
     })
   }
 
-  const scrollToBottom = (): void => {
+  const scrollToBottom = () => {
     nextTick(() => {
       setTimeout(() => {
         if (messageContainer.value) {
@@ -197,11 +187,11 @@
   }
 
   // 消息处理方法
-  const sendMessage = (): void => {
+  const sendMessage = () => {
     const text = messageText.value.trim()
     if (!text) return
 
-    const newMessage: ChatMessage = {
+    const newMessage = {
       id: messageId.value++,
       sender: USER_NAME,
       content: text,
@@ -216,12 +206,12 @@
   }
 
   // 聊天窗口控制方法
-  const openChat = (): void => {
+  const openChat = () => {
     isDrawerVisible.value = true
     scrollToBottom()
   }
 
-  const closeChat = (): void => {
+  const closeChat = () => {
     isDrawerVisible.value = false
   }
 

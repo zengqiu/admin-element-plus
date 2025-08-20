@@ -15,14 +15,12 @@
     <ArtScreenLock />
     <!-- 聊天窗口 -->
     <ArtChatWindow />
-    <!-- 礼花效果 -->
-    <ArtFireworksEffect />
     <!-- 水印效果 -->
     <ArtWatermark />
   </ArtLayouts>
 </template>
 
-<script setup lang="ts">
+<script setup>
   defineOptions({ name: 'IndexLayout' })
 </script>
 

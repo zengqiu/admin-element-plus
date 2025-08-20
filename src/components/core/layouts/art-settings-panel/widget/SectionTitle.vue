@@ -4,13 +4,16 @@
   </p>
 </template>
 
-<script setup lang="ts">
-  interface Props {
-    title: string
-    style?: Record<string, any>
-  }
-
-  defineProps<Props>()
+<script setup>
+  defineProps({
+    title: {
+      type: String,
+      required: true
+    },
+    style: {
+      type: Object  // {string: any}
+    }
+  })
 </script>
 
 <style lang="scss" scoped>

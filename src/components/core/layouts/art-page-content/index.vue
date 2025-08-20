@@ -5,9 +5,6 @@
     :class="{ 'no-basic-layout': isFullPage }"
     :style="containerStyle"
   >
-    <!-- 节日滚动 -->
-    <ArtFestivalTextScroll v-if="!isFullPage" />
-
     <RouterView v-if="isRefresh" v-slot="{ Component, route }" :style="contentStyle">
       <!-- 路由信息调试 -->
       <div v-if="isOpenRouteInfo === 'true'" class="route-info">
@@ -43,8 +40,8 @@
     </Teleport>
   </div>
 </template>
-<script setup lang="ts">
-  import type { CSSProperties } from 'vue'
+
+<script setup>
   import { useRoute } from 'vue-router'
   import { useCommon } from '@/composables/useCommon'
   import { useSettingStore } from '@/store/modules/setting'
@@ -86,7 +83,7 @@
   })
 
   const containerStyle = computed(
-    (): CSSProperties =>
+    () =>
       isFullPage.value
         ? {
             position: 'fixed',
@@ -103,7 +100,7 @@
   )
 
   const contentStyle = computed(
-    (): CSSProperties => ({
+    () => ({
       minHeight: containerMinHeight.value
     })
   )

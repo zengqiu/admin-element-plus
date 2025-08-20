@@ -118,14 +118,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import AppConfig from '@/config'
   import { RoutesAlias } from '@/router/routesAlias'
   import { ElNotification, ElMessage } from 'element-plus'
   import { useUserStore } from '@/store/modules/user'
   import { getCssVar } from '@/utils/ui'
   import { languageOptions } from '@/locales'
-  import { LanguageEnum } from '@/enums/appEnum'
   import { useI18n } from 'vue-i18n'
   import { HttpError } from '@/utils/http/error'
   import { themeAnimation } from '@/utils/theme/animation'
@@ -135,19 +134,8 @@
 
   const { t } = useI18n()
   import { useSettingStore } from '@/store/modules/setting'
-  import type { FormInstance, FormRules } from 'element-plus'
 
-  type AccountKey = 'super' | 'admin' | 'user'
-
-  export interface Account {
-    key: AccountKey
-    label: string
-    userName: string
-    password: string
-    roles: string[]
-  }
-
-  const accounts = computed<Account[]>(() => [
+  const accounts = computed(() => [
     {
       key: 'super',
       label: t('login.roles.super'),
@@ -182,7 +170,7 @@
   const isClickPass = ref(false)
 
   const systemName = AppConfig.systemInfo.name
-  const formRef = ref<FormInstance>()
+  const formRef = ref()
 
   const formData = reactive({
     account: '',
@@ -191,7 +179,7 @@
     rememberPassword: true
   })
 
-  const rules = computed<FormRules>(() => ({
+  const rules = computed(() => ({
     username: [{ required: true, message: t('login.placeholder[0]'), trigger: 'blur' }],
     password: [{ required: true, message: t('login.placeholder[1]'), trigger: 'blur' }]
   }))
@@ -203,8 +191,8 @@
   })
 
   // 设置账号
-  const setupAccount = (key: AccountKey) => {
-    const selectedAccount = accounts.value.find((account: Account) => account.key === key)
+  const setupAccount = (key) => {
+    const selectedAccount = accounts.value.find((account) => account.key === key)
     formData.account = key
     formData.username = selectedAccount?.userName ?? ''
     formData.password = selectedAccount?.password ?? ''
@@ -285,7 +273,7 @@
   // 切换语言
   const { locale } = useI18n()
 
-  const changeLanguage = (lang: LanguageEnum) => {
+  const changeLanguage = (lang) => {
     if (locale.value === lang) return
     locale.value = lang
     userStore.setLanguage(lang)

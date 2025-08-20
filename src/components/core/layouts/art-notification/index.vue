@@ -87,8 +87,8 @@
   </div>
 </template>
 
-<script setup lang="ts">
-  import { computed, ref, watch, type Ref, type ComputedRef } from 'vue'
+<script setup>
+  import { computed, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
   import AppConfig from '@/config'
 
@@ -102,54 +102,15 @@
 
   defineOptions({ name: 'ArtNotification' })
 
-  interface NoticeItem {
-    /** 标题 */
-    title: string
-    /** 时间 */
-    time: string
-    /** 类型 */
-    type: NoticeType
-  }
-
-  interface MessageItem {
-    /** 标题 */
-    title: string
-    /** 时间 */
-    time: string
-    /** 头像 */
-    avatar: string
-  }
-
-  interface PendingItem {
-    /** 标题 */
-    title: string
-    /** 时间 */
-    time: string
-  }
-
-  interface BarItem {
-    /** 名称 */
-    name: ComputedRef<string>
-    /** 数量 */
-    num: number
-  }
-
-  interface NoticeStyle {
-    /** 图标 */
-    icon: string
-    /** 图标颜色 */
-    iconColor: string
-    /** 背景颜色 */
-    backgroundColor: string
-  }
-
-  type NoticeType = 'email' | 'message' | 'collection' | 'user' | 'notice'
 
   const { t } = useI18n()
 
-  const props = defineProps<{
-    value: boolean
-  }>()
+  const props = defineProps({
+    value: {
+      type: Boolean,
+      required: true
+    }
+  })
 
   const show = ref(false)
   const visible = ref(false)
@@ -157,7 +118,7 @@
 
   const useNotificationData = () => {
     // 通知数据
-    const noticeList = ref<NoticeItem[]>([
+    const noticeList = ref([
       {
         title: '新增国际化',
         time: '2024-6-13 0:10',
@@ -191,7 +152,7 @@
     ])
 
     // 消息数据
-    const msgList = ref<MessageItem[]>([
+    const msgList = ref([
       {
         title: '池不胖 关注了你',
         time: '2021-2-26 23:50',
@@ -225,10 +186,10 @@
     ])
 
     // 待办数据
-    const pendingList = ref<PendingItem[]>([])
+    const pendingList = ref([])
 
     // 标签栏数据
-    const barList = computed<BarItem[]>(() => [
+    const barList = computed(() => [
       {
         name: computed(() => t('notice.bar[0]')),
         num: noticeList.value.length
@@ -253,7 +214,7 @@
 
   // 样式管理
   const useNotificationStyles = () => {
-    const noticeStyleMap: Record<NoticeType, NoticeStyle> = {
+    const noticeStyleMap = {
       email: {
         icon: '&#xe72e;',
         iconColor: 'rgb(var(--art-warning))',
@@ -281,13 +242,13 @@
       }
     }
 
-    const getRandomColor = (): string => {
+    const getRandomColor = () => {
       const index = Math.floor(Math.random() * AppConfig.systemMainColor.length)
       return AppConfig.systemMainColor[index]
     }
 
-    const getNoticeStyle = (type: NoticeType): NoticeStyle => {
-      const defaultStyle: NoticeStyle = {
+    const getNoticeStyle = (type) => {
+      const defaultStyle = {
         icon: '&#xe747;',
         iconColor: '#FFFFFF',
         backgroundColor: getRandomColor()
@@ -303,7 +264,7 @@
 
   // 动画管理
   const useNotificationAnimation = () => {
-    const showNotice = (open: boolean) => {
+    const showNotice = (open) => {
       if (open) {
         visible.value = open
         setTimeout(() => {
@@ -324,16 +285,12 @@
 
   // 标签页管理
   const useTabManagement = (
-    noticeList: Ref<NoticeItem[]>,
-    msgList: Ref<MessageItem[]>,
-    pendingList: Ref<PendingItem[]>,
-    businessHandlers: {
-      handleNoticeAll: () => void
-      handleMsgAll: () => void
-      handlePendingAll: () => void
-    }
+    noticeList,
+    msgList,
+    pendingList,
+    businessHandlers
   ) => {
-    const changeBar = (index: number) => {
+    const changeBar = (index) => {
       barActiveIndex.value = index
     }
 
@@ -347,7 +304,7 @@
 
     const handleViewAll = () => {
       // 查看全部处理器映射
-      const viewAllHandlers: Record<number, () => void> = {
+      const viewAllHandlers = {
         0: businessHandlers.handleNoticeAll,
         1: businessHandlers.handleMsgAll,
         2: businessHandlers.handlePendingAll

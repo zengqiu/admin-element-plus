@@ -52,9 +52,9 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { computed, onMounted, ref, watch, nextTick, onUnmounted } from 'vue'
-  import { LocationQueryRaw, useRoute, useRouter } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { ArrowDown, Close } from '@element-plus/icons-vue'
   import { storeToRefs } from 'pinia'
@@ -63,24 +63,9 @@
   import { useUserStore } from '@/store/modules/user'
   import { formatMenuTitle } from '@/router/utils/utils'
   import { useSettingStore } from '@/store/modules/setting'
-  import { MenuItemType } from '../../others/art-menu-right/index.vue'
   import { useCommon } from '@/composables/useCommon'
-  import { WorkTab } from '@/types'
 
   defineOptions({ name: 'ArtWorkTab' })
-
-  // 类型定义
-  interface ScrollState {
-    translateX: number
-    transition: string
-  }
-
-  interface TouchState {
-    startX: number
-    currentX: number
-  }
-
-  type TabCloseType = 'current' | 'left' | 'right' | 'other' | 'all'
 
   // 基础设置
   const { t } = useI18n()
@@ -93,17 +78,17 @@
   const { tabStyle, showWorkTab } = storeToRefs(settingStore)
 
   // DOM 引用
-  const scrollRef = ref<HTMLElement | null>(null)
-  const tabsRef = ref<HTMLElement | null>(null)
+  const scrollRef = ref(null)
+  const tabsRef = ref(null)
   const menuRef = ref()
 
   // 状态管理
-  const scrollState = ref<ScrollState>({
+  const scrollState = ref({
     translateX: 0,
     transition: ''
   })
 
-  const touchState = ref<TouchState>({
+  const touchState = ref({
     startX: 0,
     currentX: 0
   })
@@ -131,7 +116,7 @@
     }
 
     // 检查标签页是否固定
-    const checkTabsFixedStatus = (clickedIndex: number) => {
+    const checkTabsFixedStatus = (clickedIndex) => {
       const leftTabs = list.value.slice(0, clickedIndex)
       const rightTabs = list.value.slice(clickedIndex + 1)
       const otherTabs = list.value.filter((_, index) => index !== clickedIndex)
@@ -202,7 +187,7 @@
       }, 250)
     }
 
-    const getCurrentTabElement = (): HTMLElement | null => {
+    const getCurrentTabElement = () => {
       return document.getElementById(`scroll-li-${activeTabIndex.value}`)
     }
 
@@ -274,7 +259,7 @@
   const useEventHandlers = () => {
     const { setTransition, adjustPositionAfterClose } = useScrolling()
 
-    const handleWheelScroll = (event: WheelEvent) => {
+    const handleWheelScroll = (event) => {
       if (!scrollRef.value || !tabsRef.value) return
 
       event.preventDefault()
@@ -291,11 +276,11 @@
       )
     }
 
-    const handleTouchStart = (event: TouchEvent) => {
+    const handleTouchStart = (event) => {
       touchState.value.startX = event.touches[0].clientX
     }
 
-    const handleTouchMove = (event: TouchEvent) => {
+    const handleTouchMove = (event) => {
       if (!scrollRef.value || !tabsRef.value) return
 
       touchState.value.currentX = event.touches[0].clientX
@@ -339,15 +324,15 @@
   }
 
   // 标签页操作逻辑
-  const useTabOperations = (adjustPositionAfterClose: () => void) => {
-    const clickTab = (item: WorkTab) => {
+  const useTabOperations = (adjustPositionAfterClose) => {
+    const clickTab = (item) => {
       router.push({
         path: item.path,
-        query: item.query as LocationQueryRaw
+        query: item.query
       })
     }
 
-    const closeWorktab = (type: TabCloseType, tabPath: string) => {
+    const closeWorktab = (type, tabPath) => {
       const path = typeof tabPath === 'string' ? tabPath : route.path
 
       const closeActions = {
@@ -365,14 +350,14 @@
       }, 100)
     }
 
-    const showMenu = (e: MouseEvent, path?: string) => {
+    const showMenu = (e, path) => {
       clickedPath.value = path || ''
       menuRef.value?.show(e)
       e.preventDefault()
       e.stopPropagation()
     }
 
-    const handleSelect = (item: MenuItemType) => {
+    const handleSelect = (item) => {
       const { key } = item
 
       if (key === 'refresh') {
@@ -392,15 +377,15 @@
         left: activeIndex < clickedIndex,
         right: activeIndex > clickedIndex,
         other: true
-      } as const
+      }
 
-      const shouldNavigate = navigationRules[key as keyof typeof navigationRules]
+      const shouldNavigate = navigationRules[key]
 
       if (shouldNavigate) {
         router.push(clickedPath.value)
       }
 
-      closeWorktab(key as TabCloseType, clickedPath.value)
+      closeWorktab(key, clickedPath.value)
     }
 
     return {

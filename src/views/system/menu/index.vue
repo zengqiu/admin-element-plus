@@ -157,16 +157,14 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { useMenuStore } from '@/store/modules/menu'
-  import type { FormInstance, FormRules } from 'element-plus'
   import { ElMessage, ElMessageBox, ElTag } from 'element-plus'
   import { IconTypeEnum } from '@/enums/appEnum'
   import { formatMenuTitle } from '@/router/utils/utils'
   import ArtButtonTable from '@/components/core/forms/art-button-table/index.vue'
   import { useTableColumns } from '@/composables/useTableColumns'
   import { ElPopover, ElButton } from 'element-plus'
-  import { AppRouteRecord } from '@/types/router'
   import { useAuth } from '@/composables/useAuth'
 
   defineOptions({ name: 'Menus' })
@@ -224,7 +222,7 @@
   ])
 
   // 构建菜单类型标签
-  const buildMenuTypeTag = (row: AppRouteRecord) => {
+  const buildMenuTypeTag = (row) => {
     if (row.children && row.children.length > 0) {
       return 'info'
     } else if (row.meta?.link && row.meta?.isIframe) {
@@ -237,7 +235,7 @@
   }
 
   // 构建菜单类型文本
-  const buildMenuTypeText = (row: AppRouteRecord) => {
+  const buildMenuTypeText = (row) => {
     if (row.children && row.children.length > 0) {
       return '目录'
     } else if (row.meta?.link && row.meta?.isIframe) {
@@ -255,32 +253,32 @@
       prop: 'meta.title',
       label: '菜单名称',
       minWidth: 120,
-      formatter: (row: AppRouteRecord) => {
+      formatter: (row) => {
         return formatMenuTitle(row.meta?.title)
       }
     },
     {
       prop: 'type',
       label: '菜单类型',
-      formatter: (row: AppRouteRecord) => {
+      formatter: (row) => {
         return h(ElTag, { type: buildMenuTypeTag(row) }, () => buildMenuTypeText(row))
       }
     },
     {
       prop: 'path',
       label: '路由',
-      formatter: (row: AppRouteRecord) => {
+      formatter: (row) => {
         return row.meta?.link || row.path || ''
       }
     },
     {
       prop: 'meta.authList',
       label: '可操作权限',
-      formatter: (row: AppRouteRecord) => {
+      formatter: (row) => {
         return h(
           'div',
           {},
-          row.meta.authList?.map((item: { title: string; authMark: string }, index: number) => {
+          row.meta.authList?.map((item, index) => {
             return h(
               ElPopover,
               {
@@ -337,7 +335,7 @@
       prop: 'operation',
       label: '操作',
       width: 180,
-      formatter: (row: AppRouteRecord) => {
+      formatter: (row) => {
         return h('div', [
           // 这里写两组权限标识判断是为了方便演示，在实际开发中可以删除其中一组
           // 前端模式权限标识
@@ -404,7 +402,7 @@
   const iconType = ref(IconTypeEnum.UNICODE)
 
   const labelPosition = ref('menu')
-  const rules = reactive<FormRules>({
+  const rules = reactive({
     name: [
       { required: true, message: '请输入菜单名称', trigger: 'blur' },
       { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
@@ -416,7 +414,7 @@
     authLabel: [{ required: true, message: '请输入权限权限标识', trigger: 'blur' }]
   })
 
-  const tableData = ref<AppRouteRecord[]>([])
+  const tableData = ref([])
 
   onMounted(() => {
     getTableData()
@@ -433,12 +431,12 @@
   // 过滤后的表格数据
   const filteredTableData = computed(() => {
     // 深拷贝函数，避免修改原数据
-    const deepClone = (obj: any): any => {
+    const deepClone = (obj) => {
       if (obj === null || typeof obj !== 'object') return obj
       if (obj instanceof Date) return new Date(obj)
       if (Array.isArray(obj)) return obj.map((item) => deepClone(item))
 
-      const cloned: any = {}
+      const cloned = {}
       for (const key in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
           cloned[key] = deepClone(obj[key])
@@ -448,8 +446,8 @@
     }
 
     // 递归搜索函数
-    const searchMenu = (items: AppRouteRecord[]): AppRouteRecord[] => {
-      const results: AppRouteRecord[] = []
+    const searchMenu = (items) => {
+      const results = []
 
       for (const item of items) {
         // 获取搜索关键词，转换为小写并去除首尾空格
@@ -489,13 +487,13 @@
   })
 
   const isEdit = ref(false)
-  const formRef = ref<FormInstance>()
+  const formRef = ref()
   const dialogTitle = computed(() => {
     const type = labelPosition.value === 'menu' ? '菜单' : '权限'
     return isEdit.value ? `编辑${type}` : `新建${type}`
   })
 
-  const showDialog = (type: string, row: AppRouteRecord) => {
+  const showDialog = (type, row) => {
     showModel('menu', row, true)
   }
 
@@ -516,7 +514,7 @@
     })
   }
 
-  const showModel = (type: string, row?: any, lock: boolean = false) => {
+  const showModel = (type, row, lock = false) => {
     dialogVisible.value = true
     labelPosition.value = type
     isEdit.value = false
@@ -627,7 +625,7 @@
     nextTick(() => {
       if (tableRef.value && filteredTableData.value) {
         // 递归处理所有行的展开/收起状态
-        const processRows = (rows: AppRouteRecord[]) => {
+        const processRows = (rows) => {
           rows.forEach((row) => {
             if (row.children && row.children.length > 0) {
               tableRef.value.elTableRef.toggleRowExpansion(row, isExpanded.value)

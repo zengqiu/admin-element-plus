@@ -74,11 +74,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { ref, computed, nextTick } from 'vue'
-  import { ElPagination, ElTable, ElTableColumn, ElEmpty, type TableProps } from 'element-plus'
+  import { ElPagination, ElTable, ElTableColumn, ElEmpty } from 'element-plus'
   import { storeToRefs } from 'pinia'
-  import { ColumnOption } from '@/types'
   import { useTableStore } from '@/store/modules/table'
   import { useCommon } from '@/composables/useCommon'
   import { useElementSize, useWindowSize } from '@vueuse/core'
@@ -86,67 +85,90 @@
   defineOptions({ name: 'ArtTable' })
 
   const { width } = useWindowSize()
-  const elTableRef = ref<InstanceType<typeof ElTable> | null>(null)
-  const paginationRef = ref<HTMLElement>()
+  const elTableRef = ref(null)
+  const paginationRef = ref()
   const tableStore = useTableStore()
   const { isBorder, isZebra, tableSize, isFullScreen, isHeaderBackground } = storeToRefs(tableStore)
 
-  /** 分页配置接口 */
-  interface PaginationConfig {
-    /** 当前页码 */
-    current: number
-    /** 每页显示条目个数 */
-    size: number
-    /** 总条目数 */
-    total: number
-  }
-
-  /** 分页器配置选项接口 */
-  interface PaginationOptions {
-    /** 每页显示个数选择器的选项列表 */
-    pageSizes?: number[]
-    /** 分页器的对齐方式 */
-    align?: 'left' | 'center' | 'right'
-    /** 分页器的布局 */
-    layout?: string
-    /** 是否显示分页器背景 */
-    background?: boolean
-    /** 只有一页时是否隐藏分页器 */
-    hideOnSinglePage?: boolean
-    /** 分页器的大小 */
-    size?: 'small' | 'default' | 'large'
-    /** 分页器的页码数量 */
-    pagerCount?: number
-  }
-
-  /** ArtTable 组件的 Props 接口 */
-  interface ArtTableProps extends TableProps<Record<string, any>> {
+  const props = defineProps({
+    // --- ArtTableProps 自有属性 ---
     /** 加载状态 */
-    loading?: boolean
+    loading: {
+      type: Boolean
+    },
     /** 列渲染配置 */
-    columns?: ColumnOption[]
+    columns: {
+      type: Array,
+      default: () => []
+    },
     /** 分页状态 */
-    pagination?: PaginationConfig
+    pagination: {
+      type: Object,
+      // 可选属性，无默认值
+      // default: () => ({
+      //   /** 当前页码 */
+      //   current: undefined,  // number
+      //   /** 每页显示条目个数 */
+      //   size: undefined,  // number
+      //   /** 总条目数 */
+      //   total: undefined,  // number
+      // })
+    },
     /** 分页配置 */
-    paginationOptions?: PaginationOptions
+    paginationOptions: {
+      type: Object,
+      // 可选属性，无默认值
+      // default: () => ({
+      //   /** 每页显示个数选择器的选项列表 */
+      //   pageSizes: undefined,  // number[]
+      //   /** 分页器的对齐方式 */
+      //   align: undefined,  // 'left' | 'center' | 'right'
+      //   /** 分页器的布局 */
+      //   layout: undefined,  // string
+      //   /** 是否显示分页器背景 */
+      //   background: undefined,  // boolean
+      //   /** 只有一页时是否隐藏分页器 */
+      //   hideOnSinglePage: undefined,  // boolean
+      //   /** 分页器的大小 */
+      //   size: undefined,  // 'small' | 'default' | 'large'
+      //   /** 分页器的页码数量 */
+      //   pagerCount: undefined,  // number
+      // }),
+    },
     /** 空数据表格高度 */
-    emptyHeight?: string
+    emptyHeight: {
+      type: String,
+      default: '360px'
+    },
     /** 空数据时显示的文本 */
-    emptyText?: string
+    emptyText: {
+      type: String,
+      default: '暂无数据'
+    },
     /** 是否开启 ArtTableHeader，解决表格高度自适应问题 */
-    showTableHeader?: boolean
-  }
+    showTableHeader: {
+      type: Boolean,
+      default: true
+    },
 
-  const props = withDefaults(defineProps<ArtTableProps>(), {
-    columns: () => [],
-    fit: true,
-    showHeader: true,
-    stripe: undefined,
-    border: undefined,
-    size: undefined,
-    emptyHeight: '360px',
-    emptyText: '暂无数据',
-    showTableHeader: true
+    // --- 以下属性可能来自继承的 TableProps ---
+    fit: {
+      type: Boolean,
+      default: true
+    },
+    showHeader: {
+      type: Boolean,
+      default: true
+    },
+    stripe: {
+      type: Boolean
+    },
+    border: {
+      type: Boolean
+    },
+    size: {
+      type: String
+    }
   })
 
   const LAYOUT = {
@@ -166,7 +188,7 @@
   })
 
   // 默认分页常量
-  const DEFAULT_PAGINATION_OPTIONS: PaginationOptions = {
+  const DEFAULT_PAGINATION_OPTIONS = {
     pageSizes: [10, 20, 30, 50, 100],
     align: 'center',
     background: true,
@@ -228,7 +250,7 @@
   const showPagination = computed(() => props.pagination && !isEmpty.value)
 
   // 清理列属性，移除插槽相关的自定义属性，确保它们不会被 ElTableColumn 错误解释
-  const cleanColumnProps = (col: ColumnOption) => {
+  const cleanColumnProps = (col) => {
     const columnProps = { ...col }
     // 删除自定义的插槽控制属性
     delete columnProps.useHeaderSlot
@@ -239,12 +261,12 @@
   }
 
   // 分页大小变化
-  const handleSizeChange = (val: number) => {
+  const handleSizeChange = (val) => {
     emit('pagination:size-change', val)
   }
 
   // 分页当前页变化
-  const handleCurrentChange = (val: number) => {
+  const handleCurrentChange = (val) => {
     emit('pagination:current-change', val)
     scrollToTop() // 页码改变后滚动到表格顶部
   }
@@ -258,16 +280,13 @@
   }
 
   // 全局序号
-  const getGlobalIndex = (index: number) => {
+  const getGlobalIndex = (index) => {
     if (!props.pagination) return index + 1
     const { current, size } = props.pagination
     return (current - 1) * size + index + 1
   }
 
-  const emit = defineEmits<{
-    (e: 'pagination:size-change', val: number): void
-    (e: 'pagination:current-change', val: number): void
-  }>()
+  const emit = defineEmits(['pagination:size-change', 'pagination:current-change'])
 
   defineExpose({
     scrollToTop,

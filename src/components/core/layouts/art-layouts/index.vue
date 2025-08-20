@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import '@/assets/styles/transition.scss'
   import { MenuWidth, MenuTypeEnum } from '@/enums/appEnum'
   import { useMenuStore } from '@/store/modules/menu'

@@ -9,29 +9,43 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { BgColorEnum } from '@/enums/appEnum'
 
   defineOptions({ name: 'ArtButtonTable' })
 
-  interface Props {
+  const props = defineProps({
     /** 按钮类型 */
-    type?: 'add' | 'edit' | 'delete' | 'more' | 'view'
+    type: {
+      type: String,
+      // 使用 validator 来确保传入的值是指定类型之一
+      validator: (value) => {
+        return ['add', 'edit', 'delete', 'more', 'view'].includes(value)
+      }
+    },
     /** 按钮图标 */
-    icon?: string
+    icon: {
+      type: String
+    },
     /** 按钮样式类 */
-    iconClass?: BgColorEnum
+    iconClass: {
+      type: String,
+      // 使用 validator 确保传入的值是 BgColorEnum 中定义的值之一
+      validator: (value) => {
+        return Object.values(BgColorEnum).includes(value)
+      }
+    },
     /** icon 颜色 */
-    iconColor?: string
+    iconColor: {
+      type: String
+    },
     /** 按钮背景色 */
-    buttonBgColor?: string
-  }
+    buttonBgColor: {
+      type: String
+    }
+  })
 
-  const props = withDefaults(defineProps<Props>(), {})
-
-  const emit = defineEmits<{
-    (e: 'click'): void
-  }>()
+  const emit = defineEmits(['click'])
 
   // 默认按钮配置
   const defaultButtons = {
@@ -40,7 +54,7 @@
     delete: { icon: '&#xe783;', color: BgColorEnum.ERROR },
     view: { icon: '&#xe689;', color: BgColorEnum.INFO },
     more: { icon: '&#xe6df;', color: '' }
-  } as const
+  }
 
   // 获取图标内容
   const iconContent = computed(() => {

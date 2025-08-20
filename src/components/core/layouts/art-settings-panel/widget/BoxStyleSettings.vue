@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import SectionTitle from './SectionTitle.vue'
   import { useSettingStore } from '@/store/modules/setting'
   import { useSettingsConfig } from '../composables/useSettingsConfig'
@@ -28,7 +28,7 @@
   const { boxStyleHandlers } = useSettingsHandlers()
 
   // 判断当前选项是否激活
-  const isActive = (type: 'border-mode' | 'shadow-mode') => {
+  const isActive = (type) => {
     return type === 'border-mode' ? boxBorderMode.value : !boxBorderMode.value
   }
 </script>

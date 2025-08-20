@@ -38,24 +38,25 @@
   </ElDialog>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { ROLE_LIST_DATA } from '@/mock/temp/formData'
-  import type { FormInstance, FormRules } from 'element-plus'
   import { ElMessage } from 'element-plus'
 
-  interface Props {
-    visible: boolean
-    type: string
-    userData?: any
-  }
+  const props = defineProps({
+    visible: {
+      type: Boolean,
+      required: true
+    },
+    type: {
+      type: String,
+      required: true
+    },
+    userData: {
+      // 这个 prop 是可选的，并且可以是任何类型
+    }
+  })
 
-  interface Emits {
-    (e: 'update:visible', value: boolean): void
-    (e: 'submit'): void
-  }
-
-  const props = defineProps<Props>()
-  const emit = defineEmits<Emits>()
+  const emit = defineEmits(['update:visible', 'submit'])
 
   // 角色列表数据
   const roleList = ref(ROLE_LIST_DATA)
@@ -69,18 +70,18 @@
   const dialogType = computed(() => props.type)
 
   // 表单实例
-  const formRef = ref<FormInstance>()
+  const formRef = ref()
 
   // 表单数据
   const formData = reactive({
     username: '',
     phone: '',
     gender: '男',
-    role: [] as string[]
+    role: []
   })
 
   // 表单验证规则
-  const rules: FormRules = {
+  const rules = {
     username: [
       { required: true, message: '请输入用户名', trigger: 'blur' },
       { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }

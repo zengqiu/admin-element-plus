@@ -10,7 +10,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { getIframeRoutes } from '@/router/utils/menuToRouter'
 
   const route = useRoute()
@@ -19,7 +19,7 @@
   const iframeRef = ref<HTMLIFrameElement | null>(null)
 
   onMounted(() => {
-    const iframeRoute = getIframeRoutes().find((item: any) => item.path === route.path)
+    const iframeRoute = getIframeRoutes().find((item) => item.path === route.path)
 
     if (iframeRoute?.meta) {
       iframeUrl.value = iframeRoute.meta.link || ''

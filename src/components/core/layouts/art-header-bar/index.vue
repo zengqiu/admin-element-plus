@@ -183,7 +183,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
   import { ElMessageBox } from 'element-plus'
@@ -259,7 +259,7 @@
   /**
    * 切换全屏状态
    */
-  const toggleFullScreen = (): void => {
+  const toggleFullScreen = () => {
     toggleFullscreen()
   }
 
@@ -267,7 +267,7 @@
    * 计算顶部栏宽度
    * @returns {string} 计算后的宽度值
    */
-  const topBarWidth = (): string => {
+  const topBarWidth = () => {
     const { TOP, DUAL_MENU, TOP_LEFT } = MenuTypeEnum
     const { getMenuOpenWidth } = settingStore
     const { isFirstLevel } = router.currentRoute.value.meta
@@ -290,7 +290,7 @@
   /**
    * 切换菜单显示/隐藏状态
    */
-  const visibleMenu = (): void => {
+  const visibleMenu = () => {
     settingStore.setMenuOpen(!menuOpen.value)
   }
 
@@ -298,35 +298,35 @@
    * 页面跳转
    * @param {string} path - 目标路径
    */
-  const goPage = (path: string): void => {
+  const goPage = (path) => {
     router.push(path)
   }
 
   /**
    * 打开文档页面
    */
-  const toDocs = (): void => {
+  const toDocs = () => {
     window.open(WEB_LINKS.DOCS)
   }
 
   /**
    * 打开 GitHub 页面
    */
-  const toGithub = (): void => {
+  const toGithub = () => {
     window.open(WEB_LINKS.GITHUB)
   }
 
   /**
    * 跳转到首页
    */
-  const toHome = (): void => {
+  const toHome = () => {
     router.push(useCommon().homePath.value)
   }
 
   /**
    * 用户登出确认
    */
-  const loginOut = (): void => {
+  const loginOut = () => {
     closeUserMenu()
     setTimeout(() => {
       ElMessageBox.confirm(t('common.logOutTips'), t('common.tips'), {
@@ -343,7 +343,7 @@
    * 刷新页面
    * @param {number} time - 延迟时间，默认为0毫秒
    */
-  const reload = (time: number = 0): void => {
+  const reload = (time = 0) => {
     setTimeout(() => {
       useCommon().refresh()
     }, time)
@@ -352,7 +352,7 @@
   /**
    * 初始化语言设置
    */
-  const initLanguage = (): void => {
+  const initLanguage = () => {
     locale.value = language.value
   }
 
@@ -360,7 +360,7 @@
    * 切换系统语言
    * @param {LanguageEnum} lang - 目标语言类型
    */
-  const changeLanguage = (lang: LanguageEnum): void => {
+  const changeLanguage = (lang) => {
     if (locale.value === lang) return
     locale.value = lang
     userStore.setLanguage(lang)
@@ -370,7 +370,7 @@
   /**
    * 打开设置面板
    */
-  const openSetting = (): void => {
+  const openSetting = () => {
     mittBus.emit('openSetting')
 
     // 隐藏设置引导提示
@@ -382,7 +382,7 @@
   /**
    * 打开全局搜索对话框
    */
-  const openSearchDialog = (): void => {
+  const openSearchDialog = () => {
     mittBus.emit('openSearchDialog')
   }
 
@@ -390,7 +390,7 @@
    * 点击页面其他区域关闭通知面板
    * @param {Event} e - 点击事件对象
    */
-  const bodyCloseNotice = (e: any): void => {
+  const bodyCloseNotice = (e) => {
     let { className } = e.target
 
     if (showNotice.value) {
@@ -407,28 +407,28 @@
   /**
    * 切换通知面板显示状态
    */
-  const visibleNotice = (): void => {
+  const visibleNotice = () => {
     showNotice.value = !showNotice.value
   }
 
   /**
    * 打开聊天窗口
    */
-  const openChat = (): void => {
+  const openChat = () => {
     mittBus.emit('openChat')
   }
 
   /**
    * 打开锁屏功能
    */
-  const lockScreen = (): void => {
+  const lockScreen = () => {
     mittBus.emit('openLockScreen')
   }
 
   /**
    * 关闭用户菜单弹出层
    */
-  const closeUserMenu = (): void => {
+  const closeUserMenu = () => {
     setTimeout(() => {
       userMenuPopover.value.hide()
     }, 100)

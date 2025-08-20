@@ -9,7 +9,7 @@
   />
 </template>
 
-<script setup lang="ts">
+<script setup>
   import imgUrl from '@imgs/svg/404.svg'
   defineOptions({ name: 'Exception404' })
 </script>

@@ -63,7 +63,7 @@
   </ElPopover>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { useFastEnter } from '@/composables/useFastEnter'
 
   defineOptions({ name: 'ArtFastEnter' })
@@ -74,9 +74,9 @@
   // 使用快速入口配置
   const { enabledApplications, enabledQuickLinks } = useFastEnter()
 
-  const isExternalLink = (path: string): boolean => path.startsWith('http')
+  const isExternalLink = (path) => path.startsWith('http')
 
-  const handleNavigate = (path: string): void => {
+  const handleNavigate = (path) => {
     if (isExternalLink(path)) {
       window.open(path, '_blank')
     } else {

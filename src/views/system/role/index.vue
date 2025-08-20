@@ -119,13 +119,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { useMenuStore } from '@/store/modules/menu'
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import type { FormInstance, FormRules } from 'element-plus'
   import { formatMenuTitle } from '@/router/utils/utils'
-  import { Role, ROLE_LIST_DATA } from '@/mock/temp/formData'
-  import { ButtonMoreItem } from '@/components/core/forms/art-button-more/index.vue'
+  import { ROLE_LIST_DATA } from '@/mock/temp/formData'
 
   defineOptions({ name: 'Role' })
 
@@ -138,12 +136,12 @@
 
   // 处理菜单数据，将 authList 转换为子节点
   const processedMenuList = computed(() => {
-    const processNode = (node: any) => {
+    const processNode = (node) => {
       const processed = { ...node }
 
       // 如果有 authList，将其转换为子节点
       if (node.meta && node.meta.authList && node.meta.authList.length) {
-        const authNodes = node.meta.authList.map((auth: any) => ({
+        const authNodes = node.meta.authList.map((auth) => ({
           id: `${node.id}_${auth.authMark}`,
           name: `${node.name}_${auth.authMark}`,
           label: auth.title,
@@ -166,9 +164,9 @@
     return menuList.value.map(processNode)
   })
 
-  const formRef = ref<FormInstance>()
+  const formRef = ref()
 
-  const rules = reactive<FormRules>({
+  const rules = reactive({
     name: [
       { required: true, message: '请输入角色名称', trigger: 'blur' },
       { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
@@ -176,7 +174,7 @@
     des: [{ required: true, message: '请输入角色描述', trigger: 'blur' }]
   })
 
-  const form = reactive<Role>({
+  const form = reactive({
     roleName: '',
     roleCode: '',
     des: '',
@@ -184,7 +182,7 @@
     enable: true
   })
 
-  const roleList = ref<Role[]>([])
+  const roleList = ref([])
 
   onMounted(() => {
     getTableData()
@@ -196,7 +194,7 @@
 
   const dialogType = ref('add')
 
-  const showDialog = (type: string, row?: any) => {
+  const showDialog = (type, row) => {
     dialogVisible.value = true
     dialogType.value = type
 
@@ -215,7 +213,7 @@
     }
   }
 
-  const buttonMoreClick = (item: ButtonMoreItem, row: any) => {
+  const buttonMoreClick = (item, row) => {
     if (item.key === 'permission') {
       showPermissionDialog()
     } else if (item.key === 'edit') {
@@ -231,7 +229,7 @@
 
   const defaultProps = {
     children: 'children',
-    label: (data: any) => formatMenuTitle(data.meta?.title) || ''
+    label: (data) => formatMenuTitle(data.meta?.title) || ''
   }
 
   const deleteRole = () => {
@@ -244,7 +242,7 @@
     })
   }
 
-  const handleSubmit = async (formEl: FormInstance | undefined) => {
+  const handleSubmit = async (formEl) => {
     if (!formEl) return
 
     await formEl.validate((valid) => {
@@ -291,9 +289,9 @@
     isSelectAll.value = !isSelectAll.value
   }
 
-  const getAllNodeKeys = (nodes: any[]): string[] => {
-    const keys: string[] = []
-    const traverse = (nodeList: any[]) => {
+  const getAllNodeKeys = (nodes) => {
+    const keys = []
+    const traverse = (nodeList) => {
       nodeList.forEach((node) => {
         if (node.name) {
           keys.push(node.name)
@@ -319,7 +317,7 @@
     isSelectAll.value = checkedKeys.length === allKeys.length && allKeys.length > 0
   }
 
-  const formatDate = (date: string) => {
+  const formatDate = (date) => {
     return new Date(date)
       .toLocaleString('zh-CN', {
         year: 'numeric',

@@ -52,69 +52,75 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { IconTypeEnum } from '@/enums/appEnum'
-  import { extractIconClasses, type IconfontType } from '@/utils/constants'
+  import { extractIconClasses } from '@/utils/constants'
 
   defineOptions({ name: 'ArtIconSelector' })
 
-  // 组件大小类型
-  type ComponentSize = 'large' | 'default' | 'small'
-
-  // Props 接口定义
-  interface Props {
+  const props = defineProps({
     /** 图标类型 */
-    iconType?: IconTypeEnum
+    iconType: {
+      type: String,
+      default: IconTypeEnum.CLASS_NAME,
+      // 使用 validator 确保传入的值是 IconTypeEnum 中定义的值之一
+      validator: (value) => {
+        return Object.values(IconTypeEnum).includes(value)
+      }
+    },
     /** v-model 绑定的图标值 */
-    modelValue?: string
+    modelValue: {
+      type: String,
+      default: ''
+    },
     /** 显示文本 */
-    text?: string
+    text: {
+      type: String,
+      default: '图标选择器'
+    },
     /** 组件宽度 */
-    width?: string
+    width: {
+      type: String,
+      default: '200px'
+    },
     /** 组件大小 */
-    size?: ComponentSize
+    size: {
+      type: String,
+      default: 'default',
+      // 使用 validator 来确保传入的值是 'large', 'default', 'small' 之一
+      validator: (value) => {
+        return ['large', 'default', 'small'].includes(value)
+      }
+    },
     /** 是否禁用 */
-    disabled?: boolean
-  }
-
-  // Emits 接口定义
-  interface Emits {
-    'update:modelValue': [value: string]
-    getIcon: [value: string]
-  }
-
-  // 使用 withDefaults 定义 props
-  const props = withDefaults(defineProps<Props>(), {
-    iconType: IconTypeEnum.CLASS_NAME,
-    modelValue: '',
-    text: '图标选择器',
-    width: '200px',
-    size: 'default',
-    disabled: false
+    disabled: {
+      type: Boolean,
+      default: false
+    }
   })
 
   // 定义 emits
-  const emits = defineEmits<Emits>()
+  const emits = defineEmits(['update:modelValue', 'getIcon'])
 
   // 响应式数据
-  const selectValue = ref<string>(props.modelValue)
-  const visible = ref<boolean>(false)
-  const activeName = ref<string>('icons')
+  const selectValue = ref(props.modelValue)
+  const visible = ref(false)
+  const activeName = ref('icons')
 
   // 图标列表 - 使用计算属性优化性能
-  const iconsList = computed<IconfontType[]>(() => extractIconClasses())
+  const iconsList = computed(() => extractIconClasses())
 
   // 监听 modelValue 变化
   watch(
     () => props.modelValue,
-    (newVal: string) => {
+    (newVal) => {
       selectValue.value = newVal
     },
     { immediate: true }
   )
 
   // 选择图标
-  const selectorIcon = (icon: IconfontType): void => {
+  const selectorIcon = (icon) => {
     const iconValue =
       props.iconType === IconTypeEnum.CLASS_NAME ? icon.className : icon.unicode || ''
 
@@ -127,14 +133,14 @@
   }
 
   // 处理点击事件
-  const handleClick = (): void => {
+  const handleClick = () => {
     if (!props.disabled) {
       visible.value = true
     }
   }
 
   // 清除图标
-  const clearIcon = (): void => {
+  const clearIcon = () => {
     selectValue.value = ''
 
     // 发射 v-model 更新事件和自定义事件
@@ -143,7 +149,7 @@
   }
 
   // 计算属性：当前图标类型（用于模板中的判断）
-  const iconType = computed<IconTypeEnum>(() => props.iconType)
+  const iconType = computed(() => props.iconType)
 </script>
 
 <style lang="scss" scoped>

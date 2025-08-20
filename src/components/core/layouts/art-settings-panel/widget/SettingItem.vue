@@ -34,36 +34,31 @@
   </div>
 </template>
 
-<script setup lang="ts">
-  import type { ComputedRef } from 'vue'
-
-  interface SettingItemConfig {
-    key: string
-    label: string
-    type: 'switch' | 'input-number' | 'select'
-    handler: string
-    mobileHide?: boolean
-    min?: number
-    max?: number
-    step?: number
-    style?: Record<string, string>
-    controlsPosition?: '' | 'right'
-    options?:
-      | Array<{ value: any; label: string }>
-      | ComputedRef<Array<{ value: any; label: string }>>
-  }
-
-  interface Props {
-    config: SettingItemConfig
-    modelValue: any
-  }
-
-  interface Emits {
-    (e: 'change', value: any): void
-  }
-
-  const props = defineProps<Props>()
-  const emit = defineEmits<Emits>()
+<script setup>
+  const props = defineProps({
+    config: {
+      type: Object,
+      required: true,
+      // default: () => ({
+      //   key: undefined,  // string
+      //   label: undefined,  // string
+      //   type: undefined,  // 'switch' | 'input-number' | 'select'
+      //   handler: undefined,  // string
+      //   mobileHide: undefined,  // boolean
+      //   min: undefined,  // number
+      //   max: undefined,  // number
+      //   step: undefined,  // number
+      //   style: undefined,  // Record<string, string>
+      //   controlsPosition: undefined,  // '' | 'right'
+      //   options: undefined,  // Array
+      // })
+    },
+    modelValue: {
+      type: null, // 在 Vue props 中，type: null 意味着可以是任何类型
+      required: true
+    }
+  })
+  const emit = defineEmits(['change'])
 
   // 标准化选项，处理computed和普通数组
   const normalizedOptions = computed(() => {
@@ -83,7 +78,7 @@
     }
   })
 
-  const handleChange = (value: any) => {
+  const handleChange = (value) => {
     try {
       emit('change', value)
     } catch (error) {

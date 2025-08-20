@@ -75,11 +75,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import AppConfig from '@/config'
   import { RoutesAlias } from '@/router/routesAlias'
   import { ElMessage } from 'element-plus'
-  import type { FormInstance, FormRules } from 'element-plus'
   import { useI18n } from 'vue-i18n'
 
   defineOptions({ name: 'Register' })
@@ -87,7 +86,7 @@
   const { t } = useI18n()
 
   const router = useRouter()
-  const formRef = ref<FormInstance>()
+  const formRef = ref()
 
   const systemName = AppConfig.systemInfo.name
   const loading = ref(false)
@@ -99,7 +98,7 @@
     agreement: false
   })
 
-  const validatePass = (rule: any, value: string, callback: any) => {
+  const validatePass = (rule, value, callback) => {
     if (value === '') {
       callback(new Error(t('register.placeholder[1]')))
     } else {
@@ -110,7 +109,7 @@
     }
   }
 
-  const validatePass2 = (rule: any, value: string, callback: any) => {
+  const validatePass2 = (rule, value, callback) => {
     if (value === '') {
       callback(new Error(t('register.rule[0]')))
     } else if (value !== formData.password) {
@@ -120,7 +119,7 @@
     }
   }
 
-  const rules = reactive<FormRules>({
+  const rules = reactive({
     username: [
       { required: true, message: t('register.placeholder[0]'), trigger: 'blur' },
       { min: 3, max: 20, message: t('register.rule[2]'), trigger: 'blur' }
@@ -132,7 +131,7 @@
     confirmPassword: [{ required: true, validator: validatePass2, trigger: 'blur' }],
     agreement: [
       {
-        validator: (rule: any, value: boolean, callback: any) => {
+        validator: (rule, value, callback) => {
           if (!value) {
             callback(new Error(t('register.rule[4]')))
           } else {

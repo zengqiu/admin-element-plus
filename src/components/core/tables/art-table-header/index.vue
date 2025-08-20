@@ -74,7 +74,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
   import { computed, ref, onMounted, onUnmounted } from 'vue'
   import { storeToRefs } from 'pinia'
   import { TableSizeEnum } from '@/enums/formEnum'
@@ -82,41 +82,45 @@
   import { ElPopover, ElCheckbox, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
   import { VueDraggable } from 'vue-draggable-plus'
   import { useI18n } from 'vue-i18n'
-  import type { ColumnOption } from '@/types/component'
 
   defineOptions({ name: 'ArtTableHeader' })
 
   const { t } = useI18n()
 
-  interface Props {
+  const props = defineProps({
     /** 斑马纹 */
-    showZebra?: boolean
+    showZebra: {
+      type: Boolean,
+      default: true
+    },
     /** 边框 */
-    showBorder?: boolean
+    showBorder: {
+      type: Boolean,
+      default: true
+    },
     /** 表头背景 */
-    showHeaderBackground?: boolean
+    showHeaderBackground: {
+      type: Boolean,
+      default: true
+    },
     /** 全屏 class */
-    fullClass?: string
+    fullClass: {
+      type: String,
+      default: 'art-page-view'
+    },
     /** 组件布局，子组件名用逗号分隔 */
-    layout?: string
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    showZebra: true,
-    showBorder: true,
-    showHeaderBackground: true,
-    fullClass: 'art-page-view',
-    layout: 'refresh,size,fullscreen,columns,settings'
+    layout: {
+      type: String,
+      default: 'refresh,size,fullscreen,columns,settings'
+    }
   })
 
-  const columns = defineModel<ColumnOption[]>('columns', {
+  const columns = defineModel('columns', {
     required: false,
     default: () => []
   })
 
-  const emit = defineEmits<{
-    (e: 'refresh'): void
-  }>()
+  const emit = defineEmits(['refresh'])
 
   // ========== 数据和状态 ==========
 
@@ -144,7 +148,7 @@
    * @param componentName 组件名称
    * @returns 是否显示
    */
-  const shouldShow = (componentName: string) => {
+  const shouldShow = (componentName) => {
     return layoutItems.value.includes(componentName)
   }
 
@@ -159,7 +163,7 @@
    * 表格大小变化处理
    * @param command 表格大小枚举值
    */
-  const handleTableSizeChange = (command: TableSizeEnum) => {
+  const handleTableSizeChange = (command) => {
     useTableStore().setTableSize(command)
   }
 
@@ -199,7 +203,7 @@
    * ESC键退出全屏的事件处理器
    * 需要保存引用以便在组件卸载时正确移除监听器
    */
-  const handleEscapeKey = (e: KeyboardEvent) => {
+  const handleEscapeKey = (e) => {
     if (e.key === 'Escape' && isFullScreen.value) {
       toggleFullScreen()
     }

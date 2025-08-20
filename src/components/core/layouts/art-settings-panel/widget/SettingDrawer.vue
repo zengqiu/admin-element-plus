@@ -18,23 +18,18 @@
   </div>
 </template>
 
-<script setup lang="ts">
-  interface Props {
-    modelValue: boolean
-  }
-
-  interface Emits {
-    (e: 'update:modelValue', value: boolean): void
-    (e: 'open'): void
-    (e: 'close'): void
-  }
-
-  const props = defineProps<Props>()
-  const emit = defineEmits<Emits>()
+<script setup>
+  const props = defineProps({
+    modelValue: {
+      type: Boolean,
+      required: true
+    }
+  })
+  const emit = defineEmits(['update:modelValue', 'open', 'close'])
 
   const visible = computed({
     get: () => props.modelValue,
-    set: (value: boolean) => emit('update:modelValue', value)
+    set: (value) => emit('update:modelValue', value)
   })
 
   const handleOpen = () => {

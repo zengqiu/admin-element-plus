@@ -46,44 +46,42 @@
   </template>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { computed } from 'vue'
-  import type { AppRouteRecord } from '@/types/router'
   import { formatMenuTitle } from '@/router/utils/utils'
   import { handleMenuJump } from '@/utils/navigation'
   import { useSettingStore } from '@/store/modules/setting'
 
-  interface MenuTheme {
-    iconColor?: string
-  }
 
-  interface Props {
+  const props = defineProps({
     /** 菜单标题 */
-    title?: string
+    title: {
+      type: String,
+      default: ''
+    },
     /** 菜单列表 */
-    list?: AppRouteRecord[]
+    list: {
+      type: Array,
+      default: () => []
+    },
     /** 主题配置 */
-    theme?: MenuTheme
+    theme: {
+      type: Object,  // {iconColor?: string}
+      default: () => ({})
+    },
     /** 是否为移动端模式 */
-    isMobile?: boolean
+    isMobile: {
+      type: Boolean,
+      default: false
+    },
     /** 菜单层级 */
-    level?: number
-  }
-
-  interface Emits {
-    /** 关闭菜单事件 */
-    (e: 'close'): void
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    title: '',
-    list: () => [],
-    theme: () => ({}),
-    isMobile: false,
-    level: 0
+    level: {
+      type: Number,
+      default: 0
+    }
   })
 
-  const emit = defineEmits<Emits>()
+  const emit = defineEmits(['close'])
 
   const settingStore = useSettingStore()
 
@@ -99,7 +97,7 @@
    * 跳转到指定页面
    * @param item 菜单项数据
    */
-  const goPage = (item: AppRouteRecord): void => {
+  const goPage = (item) => {
     closeMenu()
     handleMenuJump(item)
   }
@@ -108,7 +106,7 @@
    * 关闭菜单
    * 触发父组件的关闭事件
    */
-  const closeMenu = (): void => {
+  const closeMenu = () => {
     emit('close')
   }
 
@@ -118,7 +116,7 @@
    * @param items 菜单项数组
    * @returns 过滤后的菜单项数组
    */
-  const filterRoutes = (items: AppRouteRecord[]): AppRouteRecord[] => {
+  const filterRoutes = (items) => {
     return items
       .filter((item) => {
         // 如果当前项被隐藏，直接过滤掉
@@ -147,7 +145,7 @@
    * @param item 菜单项数据
    * @returns 是否包含可见的子菜单
    */
-  const hasChildren = (item: AppRouteRecord): boolean => {
+  const hasChildren = (item) => {
     if (!item.children || item.children.length === 0) {
       return false
     }
@@ -157,7 +155,7 @@
   }
 </script>
 
-<script lang="ts">
+<script>
   /**
    * 菜单图标组件
    * 用于渲染菜单项的图标

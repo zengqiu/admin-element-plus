@@ -4,7 +4,7 @@
   </ElConfigProvider>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { useUserStore } from './store/modules/user'
   import zh from 'element-plus/es/locale/lang/zh-cn'
   import en from 'element-plus/es/locale/lang/en'

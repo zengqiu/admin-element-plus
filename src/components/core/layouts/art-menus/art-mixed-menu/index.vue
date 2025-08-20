@@ -41,36 +41,27 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { ref, computed, onMounted, nextTick } from 'vue'
   import { ElScrollbar, ElIcon } from 'element-plus'
   import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
   import { useThrottleFn } from '@vueuse/core'
   import { formatMenuTitle } from '@/router/utils/utils'
   import { handleMenuJump } from '@/utils/navigation'
-  import type { AppRouteRecord } from '@/types/router'
 
   defineOptions({ name: 'ArtMixedMenu' })
 
-  interface Props {
-    /** 菜单列表数据 */
-    list: AppRouteRecord[]
-  }
-
-  interface ProcessedMenuItem extends AppRouteRecord {
-    isActive: boolean
-    formattedTitle: string
-  }
-
-  type ScrollDirection = 'left' | 'right'
-
   const route = useRoute()
 
-  const props = withDefaults(defineProps<Props>(), {
-    list: () => []
+  const props = defineProps({
+    /** 菜单列表数据 */
+    list: {
+      type: Array,
+      default: () => []
+    }
   })
 
-  const scrollbarRef = ref<any>()
+  const scrollbarRef = ref()
   const showLeftArrow = ref(false)
   const showRightArrow = ref(false)
 
@@ -100,7 +91,7 @@
    * @param item 菜单项数据
    * @returns 是否为激活状态
    */
-  const isMenuItemActive = (item: AppRouteRecord): boolean => {
+  const isMenuItemActive = (item) => {
     const activePath = currentActivePath.value
 
     // 如果有子菜单，递归检查子菜单
@@ -121,7 +112,7 @@
    * 预处理菜单列表
    * 缓存每个菜单项的激活状态和格式化标题
    */
-  const processedMenuList = computed<ProcessedMenuItem[]>(() => {
+  const processedMenuList = computed(() => {
     return props.list.map((item) => ({
       ...item,
       isActive: isMenuItemActive(item),
@@ -133,7 +124,7 @@
    * 处理滚动事件的核心逻辑
    * 根据滚动位置显示/隐藏滚动按钮
    */
-  const handleScrollCore = (): void => {
+  const handleScrollCore = () => {
     if (!scrollbarRef.value?.wrapRef) return
 
     const { scrollLeft, scrollWidth, clientWidth } = scrollbarRef.value.wrapRef
@@ -155,7 +146,7 @@
    * 滚动菜单容器
    * @param direction 滚动方向，left 或 right
    */
-  const scroll = (direction: ScrollDirection): void => {
+  const scroll = (direction) => {
     if (!scrollbarRef.value?.wrapRef) return
 
     const currentScroll = scrollbarRef.value.wrapRef.scrollLeft
@@ -176,7 +167,7 @@
    * 优化滚轮响应性能
    * @param event 滚轮事件
    */
-  const handleWheel = (event: WheelEvent): void => {
+  const handleWheel = (event) => {
     // 立即阻止默认滚动行为和事件冒泡，避免页面滚动
     event.preventDefault()
     event.stopPropagation()
@@ -205,7 +196,7 @@
   /**
    * 初始化滚动状态
    */
-  const initScrollState = (): void => {
+  const initScrollState = () => {
     nextTick(() => {
       handleScrollCore()
     })

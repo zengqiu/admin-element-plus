@@ -38,7 +38,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import ArtButtonTable from '@/components/core/forms/art-button-table/index.vue'
   import { ACCOUNT_TABLE_DATA } from '@/mock/temp/formData'
   import { ElMessageBox, ElMessage, ElTag, ElImage } from 'element-plus'
@@ -49,16 +49,15 @@
 
   defineOptions({ name: 'User' })
 
-  type UserListItem = Api.User.UserListItem
   const { getUserList } = UserService
 
   // 弹窗相关
-  const dialogType = ref<Form.DialogType>('add')
+  const dialogType = ref('add')
   const dialogVisible = ref(false)
-  const currentUserData = ref<Partial<UserListItem>>({})
+  const currentUserData = ref({})
 
   // 选中行
-  const selectedRows = ref<UserListItem[]>([])
+  const selectedRows = ref([])
 
   // 搜索表单
   const searchForm = ref({
@@ -71,19 +70,19 @@
 
   // 用户状态配置
   const USER_STATUS_CONFIG = {
-    '1': { type: 'success' as const, text: '在线' },
-    '2': { type: 'info' as const, text: '离线' },
-    '3': { type: 'warning' as const, text: '异常' },
-    '4': { type: 'danger' as const, text: '注销' }
-  } as const
+    '1': { type: 'success', text: '在线' },
+    '2': { type: 'info', text: '离线' },
+    '3': { type: 'warning', text: '异常' },
+    '4': { type: 'danger', text: '注销' }
+  }
 
   /**
    * 获取用户状态配置
    */
-  const getUserStatusConfig = (status: string) => {
+  const getUserStatusConfig = (status) => {
     return (
-      USER_STATUS_CONFIG[status as keyof typeof USER_STATUS_CONFIG] || {
-        type: 'info' as const,
+      USER_STATUS_CONFIG[status] || {
+        type: 'info',
         text: '未知'
       }
     )
@@ -101,7 +100,7 @@
     handleSizeChange,
     handleCurrentChange,
     refreshData
-  } = useTable<UserListItem>({
+  } = useTable({
     // 核心配置
     core: {
       apiFn: getUserList,
@@ -178,7 +177,7 @@
     // 数据处理
     transform: {
       // 数据转换器 - 替换头像
-      dataTransformer: (records: any) => {
+      dataTransformer: (records) => {
         // 类型守卫检查
         if (!Array.isArray(records)) {
           console.warn('数据转换器: 期望数组类型，实际收到:', typeof records)
@@ -186,7 +185,7 @@
         }
 
         // 使用本地头像替换接口返回的头像
-        return records.map((item: any, index: number) => {
+        return records.map((item, index) => {
           return {
             ...item,
             avatar: ACCOUNT_TABLE_DATA[index % ACCOUNT_TABLE_DATA.length].avatar
@@ -200,7 +199,7 @@
    * 搜索处理
    * @param params 参数
    */
-  const handleSearch = (params: Record<string, any>) => {
+  const handleSearch = (params) => {
     // 处理日期区间参数，把 daterange 转换为 startTime 和 endTime
     const { daterange, ...filtersParams } = params
     const [startTime, endTime] = Array.isArray(daterange) ? daterange : [null, null]
@@ -213,7 +212,7 @@
   /**
    * 显示用户弹窗
    */
-  const showDialog = (type: Form.DialogType, row?: UserListItem): void => {
+  const showDialog = (type, row) => {
     console.log('打开弹窗:', { type, row })
     dialogType.value = type
     currentUserData.value = row || {}
@@ -225,7 +224,7 @@
   /**
    * 删除用户
    */
-  const deleteUser = (row: UserListItem): void => {
+  const deleteUser = (row) => {
     console.log('删除用户:', row)
     ElMessageBox.confirm(`确定要注销该用户吗？`, '注销用户', {
       confirmButtonText: '确定',
@@ -251,7 +250,7 @@
   /**
    * 处理表格行选择变化
    */
-  const handleSelectionChange = (selection: UserListItem[]): void => {
+  const handleSelectionChange = (selection) => {
     selectedRows.value = selection
     console.log('选中行数据:', selectedRows.value)
   }

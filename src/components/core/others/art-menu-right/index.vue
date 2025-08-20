@@ -45,75 +45,85 @@
   </div>
 </template>
 
-<script setup lang="ts">
-  import type { CSSProperties } from 'vue'
-
+<script setup>
   defineOptions({ name: 'ArtMenuRight' })
 
-  export interface MenuItemType {
-    /** 菜单项唯一标识 */
-    key: string
-    /** 菜单项标签 */
-    label: string
-    /** 菜单项图标 */
-    icon?: string
-    /** 菜单项是否禁用 */
-    disabled?: boolean
-    /** 菜单项是否显示分割线 */
-    showLine?: boolean
-    /** 子菜单 */
-    children?: MenuItemType[]
-    [key: string]: any
-  }
+  // export interface MenuItemType {
+  //   /** 菜单项唯一标识 */
+  //   key: string
+  //   /** 菜单项标签 */
+  //   label: string
+  //   /** 菜单项图标 */
+  //   icon?: string
+  //   /** 菜单项是否禁用 */
+  //   disabled?: boolean
+  //   /** 菜单项是否显示分割线 */
+  //   showLine?: boolean
+  //   /** 子菜单 */
+  //   children?: MenuItemType[]
+  //     [key: string]: any
+  // }
 
-  interface Props {
-    menuItems: MenuItemType[]
+  const props = defineProps({
+    menuItems: {
+      type: Array,
+      required: true
+    },
     /** 菜单宽度 */
-    menuWidth?: number
+    menuWidth: {
+      type: Number,
+      default: 120
+    },
     /** 子菜单宽度 */
-    submenuWidth?: number
+    submenuWidth: {
+      type: Number,
+      default: 150
+    },
     /** 菜单项高度 */
-    itemHeight?: number
+    itemHeight: {
+      type: Number,
+      default: 32
+    },
     /** 边界距离 */
-    boundaryDistance?: number
+    boundaryDistance: {
+      type: Number,
+      default: 10
+    },
     /** 菜单内边距 */
-    menuPadding?: number
+    menuPadding: {
+      type: Number,
+      default: 5
+    },
     /** 菜单项水平内边距 */
-    itemPaddingX?: number
+    itemPaddingX: {
+      type: Number,
+      default: 6
+    },
     /** 菜单圆角 */
-    borderRadius?: number
+    borderRadius: {
+      type: Number,
+      default: 6
+    },
     /** 动画持续时间 */
-    animationDuration?: number
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    menuWidth: 120,
-    submenuWidth: 150,
-    itemHeight: 32,
-    boundaryDistance: 10,
-    menuPadding: 5,
-    itemPaddingX: 6,
-    borderRadius: 6,
-    animationDuration: 100
+    animationDuration: {
+      type: Number,
+      default: 100
+    }
   })
 
-  const emit = defineEmits<{
-    (e: 'select', item: MenuItemType): void
-    (e: 'show'): void
-    (e: 'hide'): void
-  }>()
+  const emit = defineEmits(['select', 'show', 'hide'])
 
   const visible = ref(false)
   const position = ref({ x: 0, y: 0 })
 
   // 用于清理定时器和事件监听器
-  let showTimer: number | null = null
+  let showTimer = null
   let eventListenersAdded = false
 
   // 计算菜单样式
   const menuStyle = computed(
-    (): CSSProperties => ({
-      position: 'fixed' as const,
+    () => ({
+      position: 'fixed',
       left: `${position.value.x}px`,
       top: `${position.value.y}px`,
       zIndex: 2000,
@@ -123,14 +133,14 @@
 
   // 计算菜单列表样式
   const menuListStyle = computed(
-    (): CSSProperties => ({
+    () => ({
       padding: `${props.menuPadding}px`
     })
   )
 
   // 计算菜单项样式
   const menuItemStyle = computed(
-    (): CSSProperties => ({
+    () => ({
       height: `${props.itemHeight}px`,
       padding: `0 ${props.itemPaddingX}px`,
       borderRadius: '4px'
@@ -139,7 +149,7 @@
 
   // 计算子菜单列表样式
   const submenuListStyle = computed(
-    (): CSSProperties => ({
+    () => ({
       minWidth: `${props.submenuWidth}px`,
       padding: `${props.menuPadding}px 0`,
       borderRadius: `${props.borderRadius}px`
@@ -147,7 +157,7 @@
   )
 
   // 计算菜单高度（用于边界检测）
-  const calculateMenuHeight = (): number => {
+  const calculateMenuHeight = () => {
     let totalHeight = props.menuPadding * 2 // 上下内边距
 
     props.menuItems.forEach((item) => {
@@ -161,7 +171,7 @@
   }
 
   // 优化的位置计算函数
-  const calculatePosition = (e: MouseEvent) => {
+  const calculatePosition = (e) => {
     const screenWidth = window.innerWidth
     const screenHeight = window.innerHeight
     const menuHeight = calculateMenuHeight()
@@ -213,9 +223,9 @@
   }
 
   // 处理文档点击事件
-  const handleDocumentClick = (e: Event) => {
+  const handleDocumentClick = (e) => {
     // 检查点击是否在菜单内部
-    const target = e.target as Element
+    const target = e.target
     const menuElement = document.querySelector('.context-menu')
     if (menuElement && menuElement.contains(target)) {
       return
@@ -229,13 +239,13 @@
   }
 
   // 处理键盘事件
-  const handleKeydown = (e: KeyboardEvent) => {
+  const handleKeydown = (e) => {
     if (e.key === 'Escape') {
       hide()
     }
   }
 
-  const show = (e: MouseEvent) => {
+  const show = (e) => {
     e.preventDefault()
     e.stopPropagation()
 
@@ -276,15 +286,15 @@
     removeEventListeners()
   }
 
-  const handleMenuClick = (item: MenuItemType) => {
+  const handleMenuClick = (item) => {
     if (item.disabled) return
     emit('select', item)
     hide()
   }
 
   // 动画钩子函数
-  const onBeforeEnter = (el: Element) => {
-    const element = el as HTMLElement
+  const onBeforeEnter = (el) => {
+    const element = el
     element.style.transformOrigin = 'top left'
   }
 
