@@ -54,7 +54,7 @@
 
 <script setup>
   import { IconTypeEnum } from '@/enums/appEnum'
-  import { extractIconClasses } from '@/utils/constants'
+  import { extractIconClasses } from '@/constants'
 
   defineOptions({ name: 'ArtIconSelector' })
 

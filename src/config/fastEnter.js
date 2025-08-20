@@ -3,7 +3,7 @@
  * 包含：应用列表、快速链接等配置
  */
 import { RoutesAlias } from '@/router/routesAlias'
-import { WEB_LINKS } from '@/utils/constants'
+import { WEB_LINKS } from '@/constants'
 
 const fastEnterConfig = {
   // 显示条件（屏幕宽度）
