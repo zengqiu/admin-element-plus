@@ -15,7 +15,7 @@
 
 <script setup>
   import { ref, computed, onMounted, h } from 'vue'
-  import ArtIconSelector from '@/components/core/base/art-icon-selector/index.vue'
+  import IconSelector from '@/components/icon-selector/index.vue'
   import { IconTypeEnum } from '@/enums/appEnum'
 
   const props = defineProps({
@@ -154,7 +154,7 @@
     {
       label: '渲染组件',
       key: 'iconSelector',
-      type: () => h(ArtIconSelector, { iconType: IconTypeEnum.UNICODE, width: '100%' }),
+      type: () => h(IconSelector, { iconType: IconTypeEnum.UNICODE, width: '100%' }),
       props: { placeholder: '请输入备注', type: 'textarea', rows: 4 }
     },
     {

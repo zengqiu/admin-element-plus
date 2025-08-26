@@ -56,7 +56,7 @@
   import { IconTypeEnum } from '@/enums/appEnum'
   import { extractIconClasses } from '@/constants'
 
-  defineOptions({ name: 'ArtIconSelector' })
+  defineOptions({ name: 'IconSelector' })
 
   const props = defineProps({
     /** 图标类型 */

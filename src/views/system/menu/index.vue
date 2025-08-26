@@ -66,7 +66,7 @@
               </ElCol>
               <ElCol :span="12">
                 <ElFormItem label="图标" prop="icon">
-                  <ArtIconSelector v-model="form.icon" :iconType="iconType" width="100%" />
+                  <IconSelector v-model="form.icon" :iconType="iconType" width="100%" />
                 </ElFormItem>
               </ElCol>
             </ElRow>
