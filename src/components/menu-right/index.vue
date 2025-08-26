@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-  defineOptions({ name: 'ArtMenuRight' })
+  defineOptions({ name: 'MenuRight' })
 
   // export interface MenuItemType {
   //   /** 菜单项唯一标识 */

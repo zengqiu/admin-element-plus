@@ -42,7 +42,7 @@
       </el-icon>
     </div>
 
-    <ArtMenuRight
+    <MenuRight
       ref="menuRef"
       :menu-items="menuItems"
       :menu-width="140"
