@@ -7,7 +7,7 @@
   >
     <!-- 双列菜单（左侧） -->
     <div v-if="isDualMenu" class="dual-menu-left" :style="{ background: getMenuTheme.background }">
-      <ArtLogo class="logo" @click="navigateToHome" />
+      <Logo class="logo" @click="navigateToHome" />
 
       <ElScrollbar style="height: calc(100% - 135px)">
         <ul>
@@ -68,7 +68,7 @@
           @click="navigateToHome"
           :style="{ background: getMenuTheme.background }"
         >
-          <ArtLogo v-if="!isDualMenu" class="logo" />
+          <Logo v-if="!isDualMenu" class="logo" />
 
           <p
             :class="{ 'is-dual-menu-name': isDualMenu }"

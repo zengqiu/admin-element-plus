@@ -5,11 +5,11 @@
       <div class="left" style="display: flex">
         <!-- 系统信息  -->
         <div class="top-header" @click="toHome" v-if="isTopMenu">
-          <ArtLogo class="logo" />
+          <Logo class="logo" />
           <p v-if="width >= 1400">{{ AppConfig.systemInfo.name }}</p>
         </div>
 
-        <ArtLogo class="logo2" @click="toHome" />
+        <Logo class="logo2" @click="toHome" />
 
         <!-- 菜单按钮 -->
         <div class="btn-box" v-if="isLeftMenu && shouldShowMenuButton">

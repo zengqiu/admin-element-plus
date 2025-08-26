@@ -29,7 +29,7 @@
         </ElDropdown>
       </div>
       <div class="header">
-        <ArtLogo class="icon" />
+        <Logo class="icon" />
         <h1>{{ systemName }}</h1>
       </div>
       <div class="login-wrap">

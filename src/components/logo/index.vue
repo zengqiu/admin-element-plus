@@ -1,12 +1,12 @@
 <!-- 系统logo -->
 <template>
-  <div class="art-logo">
+  <div class="logo">
     <img :style="logoStyle" src="@imgs/common/logo.webp" alt="logo" />
   </div>
 </template>
 
 <script setup>
-  defineOptions({ name: 'ArtLogo' })
+  defineOptions({ name: 'Logo' })
 
   const props = defineProps({
     /** logo 大小 */
@@ -20,7 +20,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .art-logo {
+  .logo {
     display: flex;
     align-items: center;
     justify-content: center;

@@ -2,7 +2,7 @@
 <template>
   <div class="login-left-view">
     <div class="logo">
-      <ArtLogo class="icon" size="46" />
+      <Logo class="icon" size="46" />
       <h1 class="title">{{ AppConfig.systemInfo.name }}</h1>
     </div>
 
