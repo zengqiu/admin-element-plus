@@ -35,7 +35,7 @@
   import ContainerSettings from './widget/ContainerSettings.vue'
   import BasicSettings from './widget/BasicSettings.vue'
 
-  defineOptions({ name: 'ArtSettingsPanel' })
+  defineOptions({ name: 'SettingsPanel' })
 
   const props = defineProps({
     /** 是否打开 */

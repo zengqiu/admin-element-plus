@@ -66,7 +66,7 @@
 <script setup>
   import { useFastEnter } from '@/composables/useFastEnter'
 
-  defineOptions({ name: 'ArtFastEnter' })
+  defineOptions({ name: 'FastEnter' })
 
   const router = useRouter()
   const popoverRef = ref()

@@ -54,7 +54,7 @@ export const staticRoutes = [
   },
   {
     path: '/outside',
-    component: () => import('@views/index/index.vue'),
+    component: () => import('@/layout/index.vue'),
     name: 'Outside',
     meta: { title: 'menus.outside.title' },
     children: [

@@ -47,7 +47,7 @@
   import { useSettingStore } from '@/store/modules/setting'
   import { useWorktabStore } from '@/store/modules/worktab'
 
-  defineOptions({ name: 'ArtPageContent' })
+  defineOptions({ name: 'PageContent' })
 
   const route = useRoute()
   const { containerMinHeight } = useCommon()

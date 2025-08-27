@@ -218,7 +218,7 @@ function handleLayoutRoute(
   route,
   component
 ) {
-  converted.component = () => import('@/views/index/index.vue')
+  converted.component = () => import('@/layout/index.vue')
   converted.path = `/${(route.path?.split('/')[1] || '').trim()}`
   converted.name = ''
   route.meta.isFirstLevel = true
@@ -240,6 +240,12 @@ function handleNormalRoute(
   routeName
 ) {
   if (component) {
+    // 新增判断：如果 component 已经是对象或函数（即已导入的组件），则直接使用
+    if (typeof component === 'object' || typeof component === 'function') {
+      converted.component = component
+      return
+    }
+
     const aliasComponent = RoutesAlias[component]
     converted.component = aliasComponent || loadComponent(component, routeName)
   }

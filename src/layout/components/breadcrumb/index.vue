@@ -26,7 +26,7 @@
   import { useRouter, useRoute } from 'vue-router'
   import { formatMenuTitle } from '@/router/utils/utils'
 
-  defineOptions({ name: 'ArtBreadcrumb' })
+  defineOptions({ name: 'Breadcrumb' })
 
   const route = useRoute()
   const router = useRouter()

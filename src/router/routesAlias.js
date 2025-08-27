@@ -5,7 +5,7 @@
 /** 路由别名 */
 export const RoutesAlias = {
   // 布局和认证
-  Layout: '/index/index', // 布局容器
+  // Layout: '/index/index', // 布局容器
   Login: '/auth/login', // 登录
   Register: '/auth/register', // 注册
   ForgetPassword: '/auth/forget-password', // 忘记密码

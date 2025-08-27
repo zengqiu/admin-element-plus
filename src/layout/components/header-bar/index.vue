@@ -25,18 +25,18 @@
         </div>
 
         <!-- 快速入口 -->
-        <ArtFastEnter v-if="shouldShowFastEnter && width >= headerBarFastEnterMinWidth" />
+        <FastEnter v-if="shouldShowFastEnter && width >= headerBarFastEnterMinWidth" />
 
         <!-- 面包屑 -->
-        <ArtBreadcrumb
+        <Breadcrumb
           v-if="(shouldShowBreadcrumb && isLeftMenu) || (shouldShowBreadcrumb && isDualMenu)"
         />
 
         <!-- 顶部菜单 -->
-        <ArtHorizontalMenu v-if="isTopMenu" :list="menuList" />
+        <HorizontalMenu v-if="isTopMenu" :list="menuList" />
 
         <!-- 混合菜单-顶部 -->
-        <ArtMixedMenu v-if="isTopLeftMenu" :list="menuList" />
+        <MixedMenu v-if="isTopLeftMenu" :list="menuList" />
       </div>
 
       <div class="right">
@@ -177,9 +177,9 @@
         </div>
       </div>
     </div>
-    <ArtWorkTab />
+    <WorkTab />
 
-    <ArtNotification v-model:value="showNotice" ref="notice" />
+    <Notification v-model:value="showNotice" ref="notice" />
   </div>
 </template>
 
@@ -199,8 +199,14 @@
   import { themeAnimation } from '@/utils/theme/animation'
   import { useCommon } from '@/composables/useCommon'
   import { useHeaderBar } from '@/composables/useHeaderBar'
+  import Breadcrumb from '../breadcrumb/index.vue'
+  import FastEnter from '../fast-enter/index.vue'
+  import Notification from '../notification/index.vue'
+  import WorkTab from '../work-tab/index.vue'
+  import HorizontalMenu from '../menus/horizontal-menu/index.vue'
+  import MixedMenu from '../menus/mixed-menu/index.vue'
 
-  defineOptions({ name: 'ArtHeaderBar' })
+  defineOptions({ name: 'HeaderBar' })
 
   // 检测操作系统类型
   const isWindows = navigator.userAgent.includes('Windows')

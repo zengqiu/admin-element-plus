@@ -36,7 +36,7 @@
     <div class="right">
       <el-icon
         class="btn console-box art-custom-card"
-        @click="(e: MouseEvent) => showMenu(e, activeTab)"
+        @click="(e) => showMenu(e, activeTab)"
       >
         <ArrowDown />
       </el-icon>
@@ -64,8 +64,9 @@
   import { formatMenuTitle } from '@/router/utils/utils'
   import { useSettingStore } from '@/store/modules/setting'
   import { useCommon } from '@/composables/useCommon'
+  import MenuRight from '../menu-right/index.vue'
 
-  defineOptions({ name: 'ArtWorkTab' })
+  defineOptions({ name: 'WorkTab' })
 
   // 基础设置
   const { t } = useI18n()

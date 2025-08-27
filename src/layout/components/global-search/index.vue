@@ -86,7 +86,7 @@
   import { useMenuStore } from '@/store/modules/menu'
   import { formatMenuTitle } from '@/router/utils/utils'
 
-  defineOptions({ name: 'ArtGlobalSearch' })
+  defineOptions({ name: 'GlobalSearch' })
 
   const router = useRouter()
   const userStore = useUserStore()

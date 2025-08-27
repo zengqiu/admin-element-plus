@@ -125,7 +125,7 @@
   import SidebarSubmenu from './widget/SidebarSubmenu.vue'
   import { useCommon } from '@/composables/useCommon'
 
-  defineOptions({ name: 'ArtSidebarMenu' })
+  defineOptions({ name: 'SidebarMenu' })
 
   const MOBILE_BREAKPOINT = 800
   const ANIMATION_DELAY = 350

@@ -1,7 +1,24 @@
 <!-- 布局容器组件 -->
 <template>
   <div class="layouts" :style="layoutStyle">
-    <slot></slot>
+    <slot>
+      <!-- 顶栏、水平/混合菜单 -->
+      <HeaderBar />
+      <!-- 左侧/双列菜单 -->
+      <SidebarMenu />
+      <!-- 页面内容 -->
+      <PageContent />
+      <!-- 设置面板 -->
+      <SettingsPanel />
+      <!-- 全局搜索 -->
+      <GlobalSearch />
+      <!-- 屏幕锁定 -->
+      <ScreenLock />
+      <!-- 聊天窗口 -->
+      <ChatWindow />
+      <!-- 水印效果 -->
+      <Watermark />
+    </slot>
   </div>
 </template>
 
@@ -12,6 +29,14 @@
   import { useSettingStore } from '@/store/modules/setting'
   import { getTabConfig } from '@/utils/ui'
   import { useRouter } from 'vue-router'
+  import HeaderBar from './components/header-bar/index.vue'
+  import SidebarMenu from './components/menus/sidebar-menu/index.vue'
+  import PageContent from './components/page-content/index.vue'
+  import SettingsPanel from './components/settings-panel/index.vue'
+  import GlobalSearch from './components/global-search/index.vue'
+  import ScreenLock from './components/screen-lock/index.vue'
+  import ChatWindow from './components/chat-window/index.vue'
+  import Watermark from './components/watermark/index.vue'
 
   defineOptions({ name: 'ArtLayouts' })
 
@@ -60,3 +85,7 @@
     return `${showWorkTab.value ? openTop : closeTop}px`
   })
 </script>
+
+<style lang="scss" scoped>
+  @use './style';
+</style>

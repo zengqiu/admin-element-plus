@@ -100,7 +100,7 @@
   import avatar5 from '@/assets/img/avatar/avatar5.webp'
   import avatar6 from '@/assets/img/avatar/avatar6.webp'
 
-  defineOptions({ name: 'ArtNotification' })
+  defineOptions({ name: 'Notification' })
 
 
   const { t } = useI18n()

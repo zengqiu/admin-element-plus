@@ -49,7 +49,7 @@
   import { formatMenuTitle } from '@/router/utils/utils'
   import { handleMenuJump } from '@/utils/navigation'
 
-  defineOptions({ name: 'ArtMixedMenu' })
+  defineOptions({ name: 'MixedMenu' })
 
   const route = useRoute()
 

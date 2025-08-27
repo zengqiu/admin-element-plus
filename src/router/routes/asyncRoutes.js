@@ -1,4 +1,5 @@
 import { RoutesAlias } from '../routesAlias'
+import Layout from '@/layout/index.vue'
 
 /**
  * 菜单列表、异步路由
@@ -11,7 +12,7 @@ import { RoutesAlias } from '../routesAlias'
  * 可以是 i18n 的 key，也可以是字符串，比如：'用户列表'
  *
  * 注意事项：
- * 1、RoutesAlias.Layout 指向的是布局容器，后端返回的菜单数据中，component 字段需要指向 /index/index
+ * 1、Layout 指向的是布局容器，后端返回的菜单数据中，component 字段需要指向 /index/index
  * 2、path、name 不要和动态路由冲突，否则会导致路由冲突无法访问
  */
 export const asyncRoutes = [
@@ -30,7 +31,7 @@ export const asyncRoutes = [
   {
     path: '/system',
     name: 'System',
-    component: RoutesAlias.Layout,
+    component: Layout,
     meta: {
       title: 'menus.system.title',
       icon: '&#xe7b9;',
@@ -97,7 +98,7 @@ export const asyncRoutes = [
   {
     path: '/exception',
     name: 'Exception',
-    component: RoutesAlias.Layout,
+    component: Layout,
     meta: {
       title: 'menus.exception.title',
       icon: '&#xe820;'

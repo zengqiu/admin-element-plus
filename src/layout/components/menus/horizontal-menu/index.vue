@@ -26,7 +26,7 @@
 <script setup>
   import HorizontalSubmenu from './widget/HorizontalSubmenu.vue'
 
-  defineOptions({ name: 'ArtHorizontalMenu' })
+  defineOptions({ name: 'HorizontalMenu' })
 
   const route = useRoute()
 
