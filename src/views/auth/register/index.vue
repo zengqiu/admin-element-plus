@@ -1,6 +1,6 @@
 <template>
   <div class="login register">
-    <LoginLeftView></LoginLeftView>
+    <LeftSide />
     <div class="right-wrap">
       <div class="header">
         <Logo class="icon" />
@@ -80,6 +80,7 @@
   import { RoutesAlias } from '@/router/routesAlias'
   import { ElMessage } from 'element-plus'
   import { useI18n } from 'vue-i18n'
+  import LeftSide from '../components/left-side/index.vue'
 
   defineOptions({ name: 'Register' })
 

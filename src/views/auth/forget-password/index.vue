@@ -1,6 +1,6 @@
 <template>
   <div class="login register">
-    <LoginLeftView></LoginLeftView>
+    <LeftSide />
     <div class="right-wrap">
       <div class="header">
         <Logo class="icon" />
@@ -41,6 +41,7 @@
 <script setup>
   import AppConfig from '@/config'
   import { RoutesAlias } from '@/router/routesAlias'
+  import LeftSide from '../components/left-side/index.vue'
 
   defineOptions({ name: 'ForgetPassword' })
 

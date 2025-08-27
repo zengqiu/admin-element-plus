@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <LoginLeftView></LoginLeftView>
+    <LeftSide />
 
     <div class="right-wrap">
       <div class="top-right-wrap">
@@ -129,6 +129,7 @@
   import { HttpError } from '@/utils/http/error'
   import { themeAnimation } from '@/utils/theme/animation'
   import { UserService } from '@/api/usersApi'
+  import LeftSide from '../components/left-side/index.vue'
 
   defineOptions({ name: 'Login' })
 

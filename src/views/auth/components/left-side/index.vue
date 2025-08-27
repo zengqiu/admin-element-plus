@@ -1,6 +1,6 @@
-<!-- 登录、注册、忘记密码左侧背景 -->
+<!-- 登录、注册、忘记密码左侧 -->
 <template>
-  <div class="login-left-view">
+  <div class="left-side">
     <div class="logo">
       <Logo class="icon" size="46" />
       <h1 class="title">{{ AppConfig.systemInfo.name }}</h1>
@@ -97,7 +97,7 @@
   $bg-mix-light-8: color-mix(in srgb, $primary-light-8 80%, $main-bg);
   $bg-mix-light-7: color-mix(in srgb, $primary-light-7 80%, $main-bg);
 
-  .login-left-view {
+  .left-side {
     position: relative;
     box-sizing: border-box;
     width: 65vw;
@@ -519,7 +519,7 @@
   }
 
   // 暗色主题
-  .dark .login-left-view {
+  .dark .left-side {
     background-color: color-mix(in srgb, $primary-light-9 60%, #070707);
 
     @media only screen and (max-width: $device-ipad-pro) {
