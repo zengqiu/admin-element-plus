@@ -1,5 +1,5 @@
 <template>
-  <ArtException
+  <Exception
     :data="{
       title: '404',
       desc: $t('exceptionPage.404'),
@@ -11,5 +11,7 @@
 
 <script setup>
   import imgUrl from '@imgs/svg/404.svg'
+  import Exception from '../components/exception/index.vue'
+
   defineOptions({ name: 'Exception404' })
 </script>
