@@ -70,7 +70,7 @@
             </ElFormItem>
             <div class="drag-verify">
               <div class="drag-verify-content" :class="{ error: !isPassing && isClickPass }">
-                <ArtDragVerify
+                <DragVerify
                   ref="dragVerify"
                   v-model:value="isPassing"
                   :text="$t('login.sliderText')"
@@ -130,6 +130,7 @@
   import { themeAnimation } from '@/utils/theme/animation'
   import { UserService } from '@/api/usersApi'
   import LeftSide from '../components/left-side/index.vue'
+  import DragVerify from '../components/drag-verify/index.vue'
 
   defineOptions({ name: 'Login' })
 
