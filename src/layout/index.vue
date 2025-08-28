@@ -15,7 +15,7 @@
       <!-- 屏幕锁定 -->
       <ScreenLock />
       <!-- 聊天窗口 -->
-      <ChatWindow />
+      <Chat />
       <!-- 水印效果 -->
       <Watermark />
     </slot>
@@ -35,7 +35,7 @@
   import SettingsPanel from './components/settings-panel/index.vue'
   import GlobalSearch from './components/global-search/index.vue'
   import ScreenLock from './components/screen-lock/index.vue'
-  import ChatWindow from './components/chat-window/index.vue'
+  import Chat from './components/chat/index.vue'
   import Watermark from './components/watermark/index.vue'
 
   defineOptions({ name: 'ArtLayouts' })

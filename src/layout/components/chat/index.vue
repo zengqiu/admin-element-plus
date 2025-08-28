@@ -69,7 +69,7 @@
   import meAvatar from '@/assets/img/avatar/avatar5.webp'
   import aiAvatar from '@/assets/img/avatar/avatar10.webp'
 
-  defineOptions({ name: 'ChatWindow' })
+  defineOptions({ name: 'Chat' })
 
   // 常量定义
   const MOBILE_BREAKPOINT = 500
