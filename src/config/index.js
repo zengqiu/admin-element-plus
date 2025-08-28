@@ -5,7 +5,7 @@
 import { MenuThemeEnum, MenuTypeEnum, SystemThemeEnum } from '@/enums/appEnum'
 import { configImages } from './assets/images'
 import fastEnterConfig from './fastEnter'
-import { headerBarConfig } from './headerBar'
+import { headerConfig } from './header'
 
 const appConfig = {
   // 系统信息
@@ -135,7 +135,7 @@ const appConfig = {
   // 快速入口配置
   fastEnter: fastEnterConfig,
   // 顶部栏功能配置
-  headerBar: headerBarConfig
+  header: headerConfig
 }
 
 export default Object.freeze(appConfig)

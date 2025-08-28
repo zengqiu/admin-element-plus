@@ -1,7 +1,7 @@
 @use '@styles/variables.scss' as *;
 
 @media screen and (max-width: $device-ipad-pro) {
-  .layout-top-bar {
+  .layout-header {
     .menu {
       .right {
         .search-wrap {
@@ -17,7 +17,7 @@
 }
 
 @media screen and (max-width: $device-ipad) {
-  .layout-top-bar {
+  .layout-header {
     left: 0;
     z-index: 100;
     width: 100% !important;
@@ -34,7 +34,7 @@
 }
 
 @media screen and (max-width: $device-phone) {
-  .layout-top-bar {
+  .layout-header {
     .btn-box {
       width: 40px;
     }

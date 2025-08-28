@@ -4,7 +4,7 @@
  */
 
 // 顶部栏功能配置
-export const headerBarConfig = {
+export const headerConfig = {
   menuButton: {
     enabled: true,
     description: '控制左侧菜单的展开/收起按钮'
@@ -51,4 +51,4 @@ export const headerBarConfig = {
   }
 }
 
-export default headerBarConfig
+export default headerConfig

@@ -6,17 +6,17 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSettingStore } from '@/store/modules/setting'
-import { headerBarConfig } from '@/config/headerBar'
+import { headerConfig } from '@/config/header'
 
 /**
  * 顶部栏功能管理
  * @returns 顶部栏功能相关的状态和方法
  */
-export function useHeaderBar() {
+export function useHeader() {
   const settingStore = useSettingStore()
 
   // 获取顶部栏配置
-  const headerBarConfigRef = computed(() => headerBarConfig)
+  const headerConfigRef = computed(() => headerConfig)
 
   // 从store中获取相关状态
   const { showMenuButton, showFastEnter, showRefreshButton, showCrumbs, showLanguage } =
@@ -28,7 +28,7 @@ export function useHeaderBar() {
    * @returns 是否启用
    */
   const isFeatureEnabled = (feature) => {
-    return headerBarConfigRef.value[feature]?.enabled ?? false
+    return headerConfigRef.value[feature]?.enabled ?? false
   }
 
   /**
@@ -37,7 +37,7 @@ export function useHeaderBar() {
    * @returns 功能配置信息
    */
   const getFeatureConfig = (feature) => {
-    return headerBarConfigRef.value[feature]
+    return headerConfigRef.value[feature]
   }
 
   // 检查菜单按钮是否显示
@@ -124,8 +124,8 @@ export function useHeaderBar() {
    * @returns 启用的功能名称数组
    */
   const getEnabledFeatures = () => {
-    return Object.keys(headerBarConfigRef.value).filter(
-      (key) => headerBarConfigRef.value[key]?.enabled
+    return Object.keys(headerConfigRef.value).filter(
+      (key) => headerConfigRef.value[key]?.enabled
     )
   }
 
@@ -134,8 +134,8 @@ export function useHeaderBar() {
    * @returns 禁用的功能名称数组
    */
   const getDisabledFeatures = () => {
-    return Object.keys(headerBarConfigRef.value).filter(
-      (key) => !headerBarConfigRef.value[key]?.enabled
+    return Object.keys(headerConfigRef.value).filter(
+      (key) => !headerConfigRef.value[key]?.enabled
     )
   }
 
@@ -157,7 +157,7 @@ export function useHeaderBar() {
 
   return {
     // 配置
-    headerBarConfig: headerBarConfigRef,
+    headerConfig: headerConfigRef,
 
     // 显示状态计算属性
     shouldShowMenuButton, // 是否显示菜单按钮

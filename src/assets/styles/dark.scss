@@ -48,7 +48,7 @@ html.dark {
     h5,
     h6,
     .lang .btn,
-    .layout-top-bar .user .name,
+    .layout-header .user .name,
     .dark-text {
       color: $font-color !important;
     }
@@ -184,7 +184,7 @@ html.dark {
   }
 
   // 顶部按钮文字颜色
-  .layout-top-bar .btn-box .btn i,
+  .layout-header .btn-box .btn i,
   .fast-enter-trigger .btn i {
     color: var(--art-text-gray-700) !important;
   }
@@ -207,7 +207,7 @@ html.dark {
       h5,
       h6,
       .lang .btn,
-      .layout-top-bar .user .name {
+      .layout-header .user .name {
         color: $font-color !important;
       }
     }

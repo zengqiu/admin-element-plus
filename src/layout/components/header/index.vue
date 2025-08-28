@@ -1,6 +1,6 @@
 <!-- 顶部栏 -->
 <template>
-  <div class="layout-top-bar" :class="[tabStyle]" :style="{ width: topBarWidth() }">
+  <div class="layout-header" :class="[tabStyle]" :style="{ width: topBarWidth() }">
     <div class="menu">
       <div class="left" style="display: flex">
         <!-- 系统信息  -->
@@ -25,7 +25,7 @@
         </div>
 
         <!-- 快速入口 -->
-        <FastEnter v-if="shouldShowFastEnter && width >= headerBarFastEnterMinWidth" />
+        <FastEnter v-if="shouldShowFastEnter && width >= headerFastEnterMinWidth" />
 
         <!-- 面包屑 -->
         <Breadcrumb
@@ -198,7 +198,7 @@
   import { mittBus } from '@/utils/sys'
   import { themeAnimation } from '@/utils/theme/animation'
   import { useCommon } from '@/composables/useCommon'
-  import { useHeaderBar } from '@/composables/useHeaderBar'
+  import { useHeader } from '@/composables/useHeader'
   import Breadcrumb from '../breadcrumb/index.vue'
   import FastEnter from '../fast-enter/index.vue'
   import Notification from '../notification/index.vue'
@@ -206,7 +206,7 @@
   import HorizontalMenu from '../menus/horizontal-menu/index.vue'
   import MixedMenu from '../menus/mixed-menu/index.vue'
 
-  defineOptions({ name: 'HeaderBar' })
+  defineOptions({ name: 'Header' })
 
   // 检测操作系统类型
   const isWindows = navigator.userAgent.includes('Windows')
@@ -232,8 +232,8 @@
     shouldShowLanguage,
     shouldShowSettings,
     shouldShowThemeToggle,
-    fastEnterMinWidth: headerBarFastEnterMinWidth
-  } = useHeaderBar()
+    fastEnterMinWidth: headerFastEnterMinWidth
+  } = useHeader()
 
   const { menuOpen, systemThemeColor, showSettingGuide, menuType, isDark, tabStyle } =
     storeToRefs(settingStore)

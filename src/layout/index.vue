@@ -3,7 +3,7 @@
   <div class="layouts" :style="layoutStyle">
     <slot>
       <!-- 顶栏、水平/混合菜单 -->
-      <HeaderBar />
+      <Header />
       <!-- 左侧/双列菜单 -->
       <SidebarMenu />
       <!-- 页面内容 -->
@@ -29,7 +29,7 @@
   import { useSettingStore } from '@/store/modules/setting'
   import { getTabConfig } from '@/utils/ui'
   import { useRouter } from 'vue-router'
-  import HeaderBar from './components/header-bar/index.vue'
+  import Header from './components/header/index.vue'
   import SidebarMenu from './components/menus/sidebar-menu/index.vue'
   import PageContent from './components/page-content/index.vue'
   import SettingsPanel from './components/settings-panel/index.vue'
