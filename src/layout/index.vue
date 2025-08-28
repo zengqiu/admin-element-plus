@@ -38,7 +38,7 @@
   import Chat from './components/chat/index.vue'
   import Watermark from './components/watermark/index.vue'
 
-  defineOptions({ name: 'ArtLayouts' })
+  defineOptions({ name: 'Layout' })
 
   const settingStore = useSettingStore()
   const menuStore = useMenuStore()
