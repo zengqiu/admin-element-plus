@@ -42,7 +42,7 @@
       </el-icon>
     </div>
 
-    <MenuRight
+    <ContextMenu
       ref="menuRef"
       :menu-items="menuItems"
       :menu-width="140"
@@ -64,7 +64,7 @@
   import { formatMenuTitle } from '@/router/utils/utils'
   import { useSettingStore } from '@/store/modules/setting'
   import { useCommon } from '@/composables/useCommon'
-  import MenuRight from '../menu-right/index.vue'
+  import ContextMenu from '../context-menu/index.vue'
 
   defineOptions({ name: 'WorkTab' })
 

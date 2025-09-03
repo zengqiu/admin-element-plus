@@ -1,52 +1,50 @@
 <!-- 右键菜单 -->
 <template>
-  <div class="menu-right">
-    <Transition name="context-menu" @before-enter="onBeforeEnter" @after-leave="onAfterLeave">
-      <div v-show="visible" :style="menuStyle" class="context-menu">
-        <ul class="menu-list" :style="menuListStyle">
-          <template v-for="item in menuItems" :key="item.key">
-            <!-- 普通菜单项 -->
-            <li
-              v-if="!item.children"
-              class="menu-item"
-              :class="{ 'is-disabled': item.disabled, 'has-line': item.showLine }"
-              :style="menuItemStyle"
-              @click="handleMenuClick(item)"
-            >
+  <Transition name="context-menu" @before-enter="onBeforeEnter" @after-leave="onAfterLeave">
+    <div v-show="visible" :style="menuStyle" class="context-menu">
+      <ul class="menu-list" :style="menuListStyle">
+        <template v-for="item in menuItems" :key="item.key">
+          <!-- 普通菜单项 -->
+          <li
+            v-if="!item.children"
+            class="menu-item"
+            :class="{ 'is-disabled': item.disabled, 'has-line': item.showLine }"
+            :style="menuItemStyle"
+            @click="handleMenuClick(item)"
+          >
+            <i v-if="item.icon" class="iconfont-sys" v-html="item.icon"></i>
+            <span class="menu-label">{{ item.label }}</span>
+          </li>
+
+          <!-- 子菜单 -->
+          <li v-else class="menu-item submenu" :style="menuItemStyle">
+            <div class="submenu-title">
               <i v-if="item.icon" class="iconfont-sys" v-html="item.icon"></i>
               <span class="menu-label">{{ item.label }}</span>
-            </li>
-
-            <!-- 子菜单 -->
-            <li v-else class="menu-item submenu" :style="menuItemStyle">
-              <div class="submenu-title">
-                <i v-if="item.icon" class="iconfont-sys" v-html="item.icon"></i>
-                <span class="menu-label">{{ item.label }}</span>
-                <i class="iconfont-sys submenu-arrow">&#xe865;</i>
-              </div>
-              <ul class="submenu-list" :style="submenuListStyle">
-                <li
-                  v-for="child in item.children"
-                  :key="child.key"
-                  class="menu-item"
-                  :class="{ 'is-disabled': child.disabled, 'has-line': child.showLine }"
-                  :style="menuItemStyle"
-                  @click="handleMenuClick(child)"
-                >
-                  <i v-if="child.icon" class="iconfont-sys" v-html="child.icon"></i>
-                  <span class="menu-label">{{ child.label }}</span>
-                </li>
-              </ul>
-            </li>
-          </template>
-        </ul>
-      </div>
-    </Transition>
-  </div>
+              <i class="iconfont-sys submenu-arrow">&#xe865;</i>
+            </div>
+            <ul class="submenu-list" :style="submenuListStyle">
+              <li
+                v-for="child in item.children"
+                :key="child.key"
+                class="menu-item"
+                :class="{ 'is-disabled': child.disabled, 'has-line': child.showLine }"
+                :style="menuItemStyle"
+                @click="handleMenuClick(child)"
+              >
+                <i v-if="child.icon" class="iconfont-sys" v-html="child.icon"></i>
+                <span class="menu-label">{{ child.label }}</span>
+              </li>
+            </ul>
+          </li>
+        </template>
+      </ul>
+    </div>
+  </Transition>
 </template>
 
 <script setup>
-  defineOptions({ name: 'MenuRight' })
+  defineOptions({ name: 'ContextMenu' })
 
   // export interface MenuItemType {
   //   /** 菜单项唯一标识 */
@@ -325,176 +323,174 @@
 </script>
 
 <style lang="scss" scoped>
-  .menu-right {
-    .context-menu {
-      width: v-bind('props.menuWidth + "px"');
-      min-width: v-bind('props.menuWidth + "px"');
-      background: var(--el-bg-color);
-      border: 1px solid var(--el-border-color-light);
-      border-radius: v-bind('props.borderRadius + "px"');
-      box-shadow: var(--art-box-shadow-xs);
+  .context-menu {
+    width: v-bind('props.menuWidth + "px"');
+    min-width: v-bind('props.menuWidth + "px"');
+    background: var(--el-bg-color);
+    border: 1px solid var(--el-border-color-light);
+    border-radius: v-bind('props.borderRadius + "px"');
+    box-shadow: var(--art-box-shadow-xs);
 
-      .menu-list {
-        margin: 0;
-        list-style: none;
+    .menu-list {
+      margin: 0;
+      list-style: none;
 
-        .menu-item {
-          position: relative;
-          display: flex;
-          align-items: center;
-          font-size: 13px;
-          color: var(--el-text-color-primary);
-          cursor: pointer;
-          user-select: none;
-          transition: background-color 0.15s ease;
+      .menu-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        color: var(--el-text-color-primary);
+        cursor: pointer;
+        user-select: none;
+        transition: background-color 0.15s ease;
 
-          &:hover:not(.is-disabled) {
-            background-color: rgba(var(--art-gray-200-rgb), 0.7);
+        &:hover:not(.is-disabled) {
+          background-color: rgba(var(--art-gray-200-rgb), 0.7);
+        }
+
+        &.has-line {
+          margin-bottom: 10px;
+
+          &::after {
+            position: absolute;
+            right: 0;
+            bottom: -5px;
+            left: 0;
+            height: 1px;
+            content: '';
+            background-color: rgba(var(--art-gray-300-rgb), 0.5);
           }
+        }
 
-          &.has-line {
-            margin-bottom: 10px;
+        i:not(.submenu-arrow) {
+          flex-shrink: 0;
+          margin-right: 8px;
+          font-size: 16px;
+          color: var(--art-gray-800);
+        }
 
-            &::after {
-              position: absolute;
-              right: 0;
-              bottom: -5px;
-              left: 0;
-              height: 1px;
-              content: '';
-              background-color: rgba(var(--art-gray-300-rgb), 0.5);
-            }
+        .menu-label {
+          flex: 1;
+          overflow: hidden;
+          color: var(--art-gray-800);
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        &.is-disabled {
+          color: var(--el-text-color-disabled);
+          cursor: not-allowed;
+
+          &:hover {
+            background-color: transparent !important;
           }
 
           i:not(.submenu-arrow) {
-            flex-shrink: 0;
-            margin-right: 8px;
-            font-size: 16px;
-            color: var(--art-gray-800);
+            color: var(--el-text-color-disabled) !important;
           }
 
           .menu-label {
-            flex: 1;
-            overflow: hidden;
-            color: var(--art-gray-800);
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            color: var(--el-text-color-disabled) !important;
           }
+        }
 
-          &.is-disabled {
-            color: var(--el-text-color-disabled);
-            cursor: not-allowed;
-
-            &:hover {
-              background-color: transparent !important;
-            }
-
-            i:not(.submenu-arrow) {
-              color: var(--el-text-color-disabled) !important;
-            }
-
-            .menu-label {
-              color: var(--el-text-color-disabled) !important;
+        &.submenu {
+          &:hover {
+            .submenu-list {
+              display: block;
             }
           }
 
-          &.submenu {
-            &:hover {
-              .submenu-list {
-                display: block;
-              }
-            }
+          .submenu-title {
+            display: flex;
+            align-items: center;
+            width: 100%;
 
-            .submenu-title {
+            .submenu-arrow {
+              margin-right: 0;
+              margin-left: auto;
+              font-size: 12px;
+              color: var(--art-gray-600);
+              transition: transform 0.15s ease;
+            }
+          }
+
+          &:hover .submenu-title .submenu-arrow {
+            transform: rotate(90deg);
+          }
+
+          .submenu-list {
+            position: absolute;
+            top: 0;
+            left: 100%;
+            z-index: 2001;
+            display: none;
+            width: max-content;
+            min-width: max-content;
+            list-style: none;
+            background: var(--el-bg-color);
+            border: 1px solid var(--el-border-color-light);
+            box-shadow: var(--el-box-shadow-light);
+
+            .menu-item {
+              position: relative;
               display: flex;
               align-items: center;
-              width: 100%;
+              margin: 0 6px;
+              font-size: 13px;
+              color: var(--el-text-color-primary);
+              cursor: pointer;
+              user-select: none;
+              transition: background-color 0.15s ease;
 
-              .submenu-arrow {
-                margin-right: 0;
-                margin-left: auto;
-                font-size: 12px;
-                color: var(--art-gray-600);
-                transition: transform 0.15s ease;
+              &:hover:not(.is-disabled) {
+                background-color: rgba(var(--art-gray-200-rgb), 0.7);
               }
-            }
 
-            &:hover .submenu-title .submenu-arrow {
-              transform: rotate(90deg);
-            }
+              &.has-line {
+                margin-bottom: 10px;
 
-            .submenu-list {
-              position: absolute;
-              top: 0;
-              left: 100%;
-              z-index: 2001;
-              display: none;
-              width: max-content;
-              min-width: max-content;
-              list-style: none;
-              background: var(--el-bg-color);
-              border: 1px solid var(--el-border-color-light);
-              box-shadow: var(--el-box-shadow-light);
-
-              .menu-item {
-                position: relative;
-                display: flex;
-                align-items: center;
-                margin: 0 6px;
-                font-size: 13px;
-                color: var(--el-text-color-primary);
-                cursor: pointer;
-                user-select: none;
-                transition: background-color 0.15s ease;
-
-                &:hover:not(.is-disabled) {
-                  background-color: rgba(var(--art-gray-200-rgb), 0.7);
+                &::after {
+                  position: absolute;
+                  right: 0;
+                  bottom: -5px;
+                  left: 0;
+                  height: 1px;
+                  content: '';
+                  background-color: rgba(var(--art-gray-300-rgb), 0.5);
                 }
+              }
 
-                &.has-line {
-                  margin-bottom: 10px;
+              i:not(.submenu-arrow) {
+                flex-shrink: 0;
+                margin-right: 8px;
+                font-size: 16px;
+                color: var(--art-gray-800);
+              }
 
-                  &::after {
-                    position: absolute;
-                    right: 0;
-                    bottom: -5px;
-                    left: 0;
-                    height: 1px;
-                    content: '';
-                    background-color: rgba(var(--art-gray-300-rgb), 0.5);
-                  }
+              .menu-label {
+                flex: 1;
+                overflow: hidden;
+                color: var(--art-gray-800);
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+
+              &.is-disabled {
+                color: var(--el-text-color-disabled);
+                cursor: not-allowed;
+
+                &:hover {
+                  background-color: transparent !important;
                 }
 
                 i:not(.submenu-arrow) {
-                  flex-shrink: 0;
-                  margin-right: 8px;
-                  font-size: 16px;
-                  color: var(--art-gray-800);
+                  color: var(--el-text-color-disabled) !important;
                 }
 
                 .menu-label {
-                  flex: 1;
-                  overflow: hidden;
-                  color: var(--art-gray-800);
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                }
-
-                &.is-disabled {
-                  color: var(--el-text-color-disabled);
-                  cursor: not-allowed;
-
-                  &:hover {
-                    background-color: transparent !important;
-                  }
-
-                  i:not(.submenu-arrow) {
-                    color: var(--el-text-color-disabled) !important;
-                  }
-
-                  .menu-label {
-                    color: var(--el-text-color-disabled) !important;
-                  }
+                  color: var(--el-text-color-disabled) !important;
                 }
               }
             }
@@ -502,23 +498,23 @@
         }
       }
     }
+  }
 
-    // 动画样式
-    .context-menu-enter-active,
-    .context-menu-leave-active {
-      transition: all v-bind('props.animationDuration + "ms"') ease-out;
-    }
+  // 动画样式
+  .context-menu-enter-active,
+  .context-menu-leave-active {
+    transition: all v-bind('props.animationDuration + "ms"') ease-out;
+  }
 
-    .context-menu-enter-from,
-    .context-menu-leave-to {
-      opacity: 0;
-      transform: scale(0.9);
-    }
+  .context-menu-enter-from,
+  .context-menu-leave-to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
 
-    .context-menu-enter-to,
-    .context-menu-leave-from {
-      opacity: 1;
-      transform: scale(1);
-    }
+  .context-menu-enter-to,
+  .context-menu-leave-from {
+    opacity: 1;
+    transform: scale(1);
   }
 </style>
