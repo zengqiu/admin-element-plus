@@ -12,8 +12,8 @@
       <SettingsPanel />
       <!-- 全局搜索 -->
       <GlobalSearch />
-      <!-- 屏幕锁定 -->
-      <ScreenLock />
+      <!-- 锁屏 -->
+      <LockScreen />
       <!-- 聊天窗口 -->
       <Chat />
       <!-- 水印效果 -->
@@ -34,7 +34,7 @@
   import PageContent from './components/page-content/index.vue'
   import SettingsPanel from './components/settings-panel/index.vue'
   import GlobalSearch from './components/global-search/index.vue'
-  import ScreenLock from './components/screen-lock/index.vue'
+  import LockScreen from './components/lock-screen/index.vue'
   import Chat from './components/chat/index.vue'
   import Watermark from './components/watermark/index.vue'
 
