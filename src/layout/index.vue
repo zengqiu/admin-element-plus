@@ -7,7 +7,7 @@
       <!-- 左侧/双列菜单 -->
       <SidebarMenu />
       <!-- 页面内容 -->
-      <PageContent />
+      <Content />
       <!-- 设置面板 -->
       <SettingsPanel />
       <!-- 全局搜索 -->
@@ -31,7 +31,7 @@
   import { useRouter } from 'vue-router'
   import Header from './components/header/index.vue'
   import SidebarMenu from './components/menus/sidebar-menu/index.vue'
-  import PageContent from './components/page-content/index.vue'
+  import Content from './components/content/index.vue'
   import SettingsPanel from './components/settings-panel/index.vue'
   import GlobalSearch from './components/global-search/index.vue'
   import LockScreen from './components/lock-screen/index.vue'
