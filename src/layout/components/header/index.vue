@@ -204,7 +204,7 @@
   import Notification from '../notification/index.vue'
   import WorkTab from '../work-tab/index.vue'
   import HorizontalMenu from '../menus/horizontal-menu/index.vue'
-  import MixedMenu from '../menus/mixed-menu/index.vue'
+  import MixedMenu from '../mixed-menu/index.vue'
 
   defineOptions({ name: 'Header' })
 
